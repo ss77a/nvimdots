@@ -30,6 +30,12 @@ function config.nvim_treesitter()
 			disable = { "vim" },
 			additional_vim_regex_highlighting = false,
 		},
+		markid = {
+			enable = true,
+		},
+		illuminate = {
+			enable = true,
+		},
 		textobjects = {
 			select = {
 				enable = true,
@@ -489,6 +495,70 @@ function config.accelerated_jk()
 		-- when 'enable_deceleration = true', 'deceleration_table = { {200, 3}, {300, 7}, {450, 11}, {600, 15}, {750, 21}, {900, 9999} }'
 		deceleration_table = { { 150, 9999 } },
 	})
+end
+
+function config.markid()
+	local M = require("markid")
+	require("nvim-treesitter.configs").setup({
+		markid = {
+			enable = true,
+			colors = M.colors.medium,
+			queries = M.queries,
+			is_supported = function(lang)
+				local queries = configs.get_module("markid").queries
+				return pcall(vim.treesitter.parse_query, lang, queries[lang] or queries["default"])
+			end,
+		},
+	})
+
+	M.colors = {
+		dark = {
+			"#619e9d",
+			"#9E6162",
+			"#81A35C",
+			"#7E5CA3",
+			"#9E9261",
+			"#616D9E",
+			"#97687B",
+			"#689784",
+			"#999C63",
+			"#66639C",
+		},
+		bright = {
+			"#f5c0c0",
+			"#f5d3c0",
+			"#f5eac0",
+			"#dff5c0",
+			"#c0f5c8",
+			"#c0f5f1",
+			"#c0dbf5",
+			"#ccc0f5",
+			"#f2c0f5",
+			"#98fc03",
+		},
+		medium = {
+			"#c99d9d",
+			"#c9a99d",
+			"#c9b79d",
+			"#c9c39d",
+			"#bdc99d",
+			"#a9c99d",
+			"#9dc9b6",
+			"#9dc2c9",
+			"#9da9c9",
+			"#b29dc9",
+		},
+	}
+
+	M.queries = {
+		default = "(identifier) @markid",
+		javascript = [[
+              (identifier) @markid
+              (property_identifier) @markid
+              (shorthand_property_identifier_pattern) @markid
+            ]],
+	}
+	M.queries.typescript = M.queries.javascript
 end
 
 return config

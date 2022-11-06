@@ -42,6 +42,11 @@ editor["andymass/vim-matchup"] = {
 	opt = true,
 	after = "nvim-treesitter",
 }
+editor["David-Kunz/markid"] = {
+	opt = true,
+	after = "nvim-treesitter",
+	--config = conf.markid,
+}
 editor["rainbowhxch/accelerated-jk.nvim"] = { opt = true, event = "BufWinEnter", config = conf.accelerated_jk }
 editor["hrsh7th/vim-eft"] = { opt = true, event = "BufReadPost" }
 editor["romainl/vim-cool"] = {
