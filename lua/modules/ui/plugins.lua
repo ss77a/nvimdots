@@ -59,4 +59,9 @@ ui["j-hui/fidget.nvim"] = {
 	config = conf.fidget,
 }
 
+ui["ThemerCorp/themer.lua"] = {
+	opt = false,
+	--config = conf.themer,
+}
+
 return ui
