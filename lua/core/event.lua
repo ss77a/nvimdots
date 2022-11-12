@@ -46,6 +46,11 @@ function autocmd.load_autocmds()
 				"*",
 				[[if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]],
 			},
+			{
+				"BufEnter",
+				"*.astro",
+				[[ setlocal includeexpr=substitute(v:fname,'^~\/','src/','') ]],
+			},
 			-- Auto toggle fcitx5
 			-- {"InsertLeave", "* :silent", "!fcitx5-remote -c"},
 			-- {"BufCreate", "*", ":silent !fcitx5-remote -c"},

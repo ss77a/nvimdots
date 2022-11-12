@@ -48,5 +48,9 @@ tools["gelguy/wilder.nvim"] = {
 	config = conf.wilder,
 	requires = { { "romgrk/fzy-lua-native", after = "wilder.nvim" } },
 }
+tools["ray-x/web-tools.nvim"] = {
+	opt = true,
+	config = conf.webtool,
+}
 
 return tools

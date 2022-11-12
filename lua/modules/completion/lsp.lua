@@ -19,6 +19,8 @@ mason_lsp.setup({
 		"clangd",
 		"gopls",
 		"pyright",
+		"astro",
+		"tailwindcss",
 	},
 })
 
@@ -210,7 +212,8 @@ end
 -- https://github.com/vscode-langservers/vscode-html-languageserver-bin
 
 nvim_lsp.html.setup({
-	cmd = { "html-languageserver", "--stdio" },
+	--
+	cmd = { "vscode-html-language-server", "--stdio" },
 	filetypes = { "html" },
 	init_options = {
 		configurationSection = { "html", "css", "javascript" },

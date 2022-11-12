@@ -244,4 +244,14 @@ function config.wilder()
 	)
 end
 
+function config.webtools()
+	require("web-tools").setup({
+		preview = "",
+		keymaps = {
+			rename = nil, -- by default use same setup of lspconfig
+			repeat_rename = ".", -- . to repeat
+		},
+	})
+end
+
 return config

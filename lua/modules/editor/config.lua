@@ -132,7 +132,18 @@ function config.autotag()
 end
 
 function config.nvim_colorizer()
-	require("colorizer").setup()
+	require("colorizer").setup({
+		RGB = true, -- #RGB hex codes
+		RRGGBB = true, -- #RRGGBB hex codes
+		names = true, -- "Name" codes like Blue
+		RRGGBBAA = true, -- #RRGGBBAA hex codes
+		rgb_fn = true, -- CSS rgb() and rgba() functions
+		hsl_fn = true, -- CSS hsl() and hsla() functions
+		css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+		css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+		-- Available modes: foreground, background
+		mode = "background", -- Set the display mode.
+	})
 end
 
 function config.neoscroll()
@@ -505,7 +516,7 @@ function config.markid()
 			colors = M.colors.medium,
 			queries = M.queries,
 			is_supported = function(lang)
-				local queries = configs.get_module("markid").queries
+				local queries = config.get_module("markid").queries
 				return pcall(vim.treesitter.parse_query, lang, queries[lang] or queries["default"])
 			end,
 		},
@@ -559,6 +570,65 @@ function config.markid()
             ]],
 	}
 	M.queries.typescript = M.queries.javascript
+end
+
+function config.astro()
+	vim.cmd([[let g:astro_typescript = 'enable']])
+end
+
+function config.substitute()
+	require("substitute").setup({
+		on_substitute = nil,
+		yank_substituted_text = false,
+		range = {
+			prefix = "s",
+			prompt_current_text = false,
+			confirm = false,
+			complete_word = false,
+			motion1 = false,
+			motion2 = false,
+			suffix = "",
+		},
+		exchange = {
+			motion = false,
+			use_esc_to_cancel = true,
+		},
+	})
+
+	vim.keymap.set("n", "ts", "<cmd>lua require('substitute').operator()<cr>", { noremap = true })
+	vim.keymap.set("n", "tt", "<cmd>lua require('substitute').line()<cr>", { noremap = true })
+	vim.keymap.set("n", "T", "<cmd>lua require('substitute').eol()<cr>", { noremap = true })
+	vim.keymap.set("x", "ts", "<cmd>lua require('substitute').visual()<cr>", { noremap = true })
+
+	vim.keymap.set("n", "tx", "<cmd>lua require('substitute.exchange').operator()<cr>", { noremap = true })
+	vim.keymap.set("n", "txx", "<cmd>lua require('substitute.exchange').line()<cr>", { noremap = true })
+	vim.keymap.set("x", "X", "<cmd>lua require('substitute.exchange').visual()<cr>", { noremap = true })
+	vim.keymap.set("n", "txc", "<cmd>lua require('substitute.exchange').cancel()<cr>", { noremap = true })
+end
+
+function config.neotree()
+	require("neo-tree").setup({
+		source_selector = {
+			winbar = false,
+			statusline = false,
+		},
+	})
+end
+
+function config.navic()
+	local navic = require("navic")
+
+	local lspconfig = require("plugins.configs.lspconfig")
+
+	local on_attach = function(client, bufnr)
+		if client.server_capabilities.documentSymbolProvider then
+			navic.attach(client, bufnr)
+		end
+	end
+
+	lspconfig.clangd.setup({
+		on_attach = on_attach,
+	})
 end
 
 return config

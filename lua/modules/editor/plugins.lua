@@ -130,7 +130,24 @@ editor["luukvbaal/stabilize.nvim"] = {
 	opt = true,
 	event = "BufReadPost",
 }
-
+editor["wuelnerdotexe/vim-astro"] = {
+	opt = true,
+	config = conf.astro,
+}
+editor["gbprod/substitute.nvim"] = {
+	opt = true,
+	config = conf.substitute,
+}
+editor["nvim-neo-tree/neo-tree.nvim"] = {
+	opt = false,
+	module = "neotree",
+	config = conf.neotree,
+}
+editor["SmiteshP/nvim-navic"] = {
+	opt = false,
+	module = "navic",
+	config = conf.navic,
+}
 -- only for fcitx5 user who uses non-English language during coding
 -- editor["brglng/vim-im-select"] = {
 -- 	opt = true,
