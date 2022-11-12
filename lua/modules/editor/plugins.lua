@@ -148,6 +148,12 @@ editor["SmiteshP/nvim-navic"] = {
 	module = "navic",
 	config = conf.navic,
 }
+editor["ibhagwan/smartyank.nvim"] = {
+	opt = true,
+	event = "BufReadPost",
+	config = conf.smartyank,
+}
+
 -- only for fcitx5 user who uses non-English language during coding
 -- editor["brglng/vim-im-select"] = {
 -- 	opt = true,
