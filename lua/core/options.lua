@@ -19,10 +19,10 @@ local function load_options()
 		writebackup = false,
 		swapfile = false,
 		undodir = global.cache_dir .. "undo/",
-		-- directory = global.cache_dir .. "swap/",
-		-- backupdir = global.cache_dir .. "backup/",
-		-- viewdir = global.cache_dir .. "view/",
-		-- spellfile = global.cache_dir .. "spell/en.uft-8.add",
+		directory = global.cache_dir .. "swap/",
+		backupdir = global.cache_dir .. "backup/",
+		viewdir = global.cache_dir .. "view/",
+		spellfile = global.cache_dir .. "spell/en.uft-8.add",
 		history = 2000,
 		shada = "!,'300,<50,@100,s10,h",
 		backupskip = "/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim",
@@ -77,8 +77,8 @@ local function load_options()
 		display = "lastline",
 		showbreak = "↳  ",
 		listchars = "tab:»·,nbsp:+,trail:·,extends:→,precedes:←",
-		-- pumblend = 10,
-		-- winblend = 10,
+		pumblend = 10,
+		winblend = 10,
 		autoread = true,
 		autowrite = true,
 
@@ -99,6 +99,16 @@ local function load_options()
 		signcolumn = "yes",
 		conceallevel = 0,
 		concealcursor = "niv",
+		smartindent = true,
+
+		foldmethod = "expr",
+		foldexpr = "nvim_treesitter#foldexpr()",
+		mouse = "a",
+
+		ls = 0,
+		ch = 0,
+		autosave = true,
+		breakindent = true,
 	}
 	local function isempty(s)
 		return s == nil or s == ""
@@ -117,9 +127,24 @@ local function load_options()
 		vim.g.python3_host_prog = "/usr/bin/python3"
 	end
 
+	vim.g.loaded_perl_provider = 0
+	vim.g.loaded_ruby_provider = 0
+
 	for name, value in pairs(global_local) do
 		vim.o[name] = value
 	end
 end
+
+--[[ Highlight on yank - See `:help vim.highlight.on_yank()` ]]
+--[[---------------------------------------------------------]]
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
+})
+--]]
 
 load_options()

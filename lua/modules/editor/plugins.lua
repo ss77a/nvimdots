@@ -42,6 +42,11 @@ editor["andymass/vim-matchup"] = {
 	opt = true,
 	after = "nvim-treesitter",
 }
+editor["David-Kunz/markid"] = {
+	opt = true,
+	after = "nvim-treesitter",
+	--config = conf.markid,
+}
 editor["rainbowhxch/accelerated-jk.nvim"] = { opt = true, event = "BufWinEnter", config = conf.accelerated_jk }
 editor["hrsh7th/vim-eft"] = { opt = true, event = "BufReadPost" }
 editor["romainl/vim-cool"] = {
@@ -124,6 +129,29 @@ editor["sindrets/diffview.nvim"] = {
 editor["luukvbaal/stabilize.nvim"] = {
 	opt = true,
 	event = "BufReadPost",
+}
+editor["wuelnerdotexe/vim-astro"] = {
+	opt = true,
+	config = conf.astro,
+}
+editor["gbprod/substitute.nvim"] = {
+	opt = true,
+	config = conf.substitute,
+}
+editor["nvim-neo-tree/neo-tree.nvim"] = {
+	opt = false,
+	module = "neotree",
+	config = conf.neotree,
+}
+editor["SmiteshP/nvim-navic"] = {
+	opt = false,
+	module = "navic",
+	config = conf.navic,
+}
+editor["ibhagwan/smartyank.nvim"] = {
+	opt = true,
+	event = "BufReadPost",
+	config = conf.smartyank,
 }
 
 -- only for fcitx5 user who uses non-English language during coding

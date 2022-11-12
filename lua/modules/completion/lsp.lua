@@ -10,7 +10,11 @@ local mason_lsp = require("mason-lspconfig")
 
 require("lspconfig.ui.windows").default_options.border = "single"
 
-mason.setup()
+mason.setup({
+	ui = {
+		border = "single",
+	},
+})
 mason_lsp.setup({
 	ensure_installed = {
 		"bashls",
@@ -19,6 +23,8 @@ mason_lsp.setup({
 		"clangd",
 		"gopls",
 		"pyright",
+		"astro",
+		"tailwindcss",
 	},
 })
 
@@ -210,7 +216,8 @@ end
 -- https://github.com/vscode-langservers/vscode-html-languageserver-bin
 
 nvim_lsp.html.setup({
-	cmd = { "html-languageserver", "--stdio" },
+	--
+	cmd = { "vscode-html-language-server", "--stdio" },
 	filetypes = { "html" },
 	init_options = {
 		configurationSection = { "html", "css", "javascript" },

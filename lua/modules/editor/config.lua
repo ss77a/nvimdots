@@ -1,5 +1,6 @@
 local config = {}
 local sessions_dir = vim.fn.stdpath("data") .. "/sessions/"
+local use_ssh = require("core.settings").use_ssh
 
 function config.nvim_treesitter()
 	vim.api.nvim_set_option_value("foldmethod", "expr", {})
@@ -29,6 +30,12 @@ function config.nvim_treesitter()
 			enable = true,
 			disable = { "vim" },
 			additional_vim_regex_highlighting = false,
+		},
+		markid = {
+			enable = true,
+		},
+		illuminate = {
+			enable = true,
 		},
 		textobjects = {
 			select = {
@@ -70,9 +77,11 @@ function config.nvim_treesitter()
 		matchup = { enable = true },
 	})
 	require("nvim-treesitter.install").prefer_git = true
-	local parsers = require("nvim-treesitter.parsers").get_parser_configs()
-	for _, p in pairs(parsers) do
-		p.install_info.url = p.install_info.url:gsub("https://github.com/", "git@github.com:")
+	if use_ssh then
+		local parsers = require("nvim-treesitter.parsers").get_parser_configs()
+		for _, p in pairs(parsers) do
+			p.install_info.url = p.install_info.url:gsub("https://github.com/", "git@github.com:")
+		end
 	end
 end
 
@@ -126,7 +135,18 @@ function config.autotag()
 end
 
 function config.nvim_colorizer()
-	require("colorizer").setup()
+	require("colorizer").setup({
+		RGB = true, -- #RGB hex codes
+		RRGGBB = true, -- #RRGGBB hex codes
+		names = true, -- "Name" codes like Blue
+		RRGGBBAA = true, -- #RRGGBBAA hex codes
+		rgb_fn = true, -- CSS rgb() and rgba() functions
+		hsl_fn = true, -- CSS hsl() and hsla() functions
+		css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+		css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+		-- Available modes: foreground, background
+		mode = "background", -- Set the display mode.
+	})
 end
 
 function config.neoscroll()
@@ -488,6 +508,154 @@ function config.accelerated_jk()
 		acceleration_table = { 7, 12, 17, 21, 24, 26, 28, 30 },
 		-- when 'enable_deceleration = true', 'deceleration_table = { {200, 3}, {300, 7}, {450, 11}, {600, 15}, {750, 21}, {900, 9999} }'
 		deceleration_table = { { 150, 9999 } },
+	})
+end
+
+function config.markid()
+	local M = require("markid")
+	require("nvim-treesitter.configs").setup({
+		markid = {
+			enable = true,
+			colors = M.colors.medium,
+			queries = M.queries,
+			is_supported = function(lang)
+				local queries = config.get_module("markid").queries
+				return pcall(vim.treesitter.parse_query, lang, queries[lang] or queries["default"])
+			end,
+		},
+	})
+
+	M.colors = {
+		dark = {
+			"#619e9d",
+			"#9E6162",
+			"#81A35C",
+			"#7E5CA3",
+			"#9E9261",
+			"#616D9E",
+			"#97687B",
+			"#689784",
+			"#999C63",
+			"#66639C",
+		},
+		bright = {
+			"#f5c0c0",
+			"#f5d3c0",
+			"#f5eac0",
+			"#dff5c0",
+			"#c0f5c8",
+			"#c0f5f1",
+			"#c0dbf5",
+			"#ccc0f5",
+			"#f2c0f5",
+			"#98fc03",
+		},
+		medium = {
+			"#c99d9d",
+			"#c9a99d",
+			"#c9b79d",
+			"#c9c39d",
+			"#bdc99d",
+			"#a9c99d",
+			"#9dc9b6",
+			"#9dc2c9",
+			"#9da9c9",
+			"#b29dc9",
+		},
+	}
+
+	M.queries = {
+		default = "(identifier) @markid",
+		javascript = [[
+              (identifier) @markid
+              (property_identifier) @markid
+              (shorthand_property_identifier_pattern) @markid
+            ]],
+	}
+	M.queries.typescript = M.queries.javascript
+end
+
+function config.astro()
+	vim.cmd([[let g:astro_typescript = 'enable']])
+end
+
+function config.substitute()
+	require("substitute").setup({
+		on_substitute = nil,
+		yank_substituted_text = false,
+		range = {
+			prefix = "s",
+			prompt_current_text = false,
+			confirm = false,
+			complete_word = false,
+			motion1 = false,
+			motion2 = false,
+			suffix = "",
+		},
+		exchange = {
+			motion = false,
+			use_esc_to_cancel = true,
+		},
+	})
+
+	vim.keymap.set("n", "ts", "<cmd>lua require('substitute').operator()<cr>", { noremap = true })
+	vim.keymap.set("n", "tt", "<cmd>lua require('substitute').line()<cr>", { noremap = true })
+	vim.keymap.set("n", "T", "<cmd>lua require('substitute').eol()<cr>", { noremap = true })
+	vim.keymap.set("x", "ts", "<cmd>lua require('substitute').visual()<cr>", { noremap = true })
+
+	vim.keymap.set("n", "tx", "<cmd>lua require('substitute.exchange').operator()<cr>", { noremap = true })
+	vim.keymap.set("n", "txx", "<cmd>lua require('substitute.exchange').line()<cr>", { noremap = true })
+	vim.keymap.set("x", "X", "<cmd>lua require('substitute.exchange').visual()<cr>", { noremap = true })
+	vim.keymap.set("n", "txc", "<cmd>lua require('substitute.exchange').cancel()<cr>", { noremap = true })
+end
+
+function config.neotree()
+	require("neo-tree").setup({
+		source_selector = {
+			winbar = false,
+			statusline = false,
+		},
+	})
+end
+
+function config.smartyank()
+	require("smartyank").setup({
+		highlight = {
+			enabled = false, -- highlight yanked text
+			higroup = "IncSearch", -- highlight group of yanked text
+			timeout = 2000, -- timeout for clearing the highlight
+		},
+		clipboard = {
+			enabled = true,
+		},
+		tmux = {
+			enabled = true,
+			-- remove `-w` to disable copy to host client's clipboard
+			cmd = { "tmux", "set-buffer", "-w" },
+		},
+		osc52 = {
+			enabled = true,
+			escseq = "tmux", -- use tmux escape sequence, only enable if you're using remote tmux and have issues (see #4)
+			ssh_only = true, -- false to OSC52 yank also in local sessions
+			silent = false, -- true to disable the "n chars copied" echo
+			echo_hl = "Directory", -- highlight group of the OSC52 echo message
+		},
+	})
+end
+
+function config.navic()
+	local navic = require("navic")
+
+	local lspconfig = require("plugins.configs.lspconfig")
+
+	local on_attach = function(client, bufnr)
+		if client.server_capabilities.documentSymbolProvider then
+			navic.attach(client, bufnr)
+		end
+	end
+
+	lspconfig.clangd.setup({
+		on_attach = on_attach,
 	})
 end
 
