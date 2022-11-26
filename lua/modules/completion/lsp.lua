@@ -243,7 +243,9 @@ efmls.init({
 -- Require `efmls-configs-nvim`'s config here
 
 local vint = require("efmls-configs.linters.vint")
-local eslint = require("efmls-configs.linters.eslint")
+--local eslint = require("efmls-configs.linters.eslint")
+local eslint_d = require 'efmls-configs.linters.eslint_d'
+--local eslint_d_fmt = require 'efmls-configs.formatters.eslint_d'
 local flake8 = require("efmls-configs.linters.flake8")
 local shellcheck = require("efmls-configs.linters.shellcheck")
 
@@ -276,16 +278,17 @@ efmls.setup({
 	cpp = { formatter = clangfmt },
 	python = { formatter = black },
 	vue = { formatter = prettier },
-	typescript = { formatter = prettier, linter = eslint },
-	javascript = { formatter = prettier, linter = eslint },
-	typescriptreact = { formatter = prettier, linter = eslint },
-	javascriptreact = { formatter = prettier, linter = eslint },
+	typescript = { formatter = prettier, linter = eslint_d },
+	javascript = { formatter = prettier, linter = eslint_d },
+	typescriptreact = { formatter = prettier, linter = eslint_d },
+	javascriptreact = { formatter = prettier, linter = eslint_d },
 	yaml = { formatter = prettier },
 	html = { formatter = prettier },
 	css = { formatter = prettier },
 	scss = { formatter = prettier },
 	sh = { formatter = shfmt, linter = shellcheck },
 	markdown = { formatter = prettier },
+	
 	-- rust = {formatter = rustfmt},
 })
 
