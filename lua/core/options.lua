@@ -114,6 +114,16 @@ local function load_options()
 		return s == nil or s == ""
 	end
 
+	-- load filetypes
+	vim.filetype.add({
+		extension = {
+			astro = "astro",
+		},
+	})
+
+	-- vim.g.do_filetype_lua = 1
+	-- vim.g.did_load_filetypes = 0
+
 	-- custom python provider
 	local conda_prefix = os.getenv("CONDA_PREFIX")
 	if not isempty(conda_prefix) then
