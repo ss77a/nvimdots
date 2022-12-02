@@ -26,16 +26,14 @@ tools["nvim-telescope/telescope-frecency.nvim"] = {
 	after = "telescope-project.nvim",
 	requires = { { "kkharji/sqlite.lua", opt = true } },
 }
-tools["jvgrootveld/telescope-zoxide"] = { opt = true, after = "telescope-frecency.nvim" }
+tools["jvgrootveld/telescope-zoxide"] = {
+	opt = true,
+	after = "telescope-frecency.nvim",
+}
 tools["michaelb/sniprun"] = {
 	opt = true,
 	run = "bash ./install.sh",
 	cmd = { "SnipRun", "'<,'>SnipRun" },
-}
-tools["folke/which-key.nvim"] = {
-	opt = true,
-	keys = "<leader>",
-	config = conf.which_key,
 }
 tools["folke/trouble.nvim"] = {
 	opt = true,
@@ -59,6 +57,20 @@ tools["vuki656/package-info.nvim"] = {
 	opt = false,
 	config = conf.packageInfo,
 	requires = { { "MunifTanjim/nui.nvim", opt = false} },
+-- Please don't remove which-key.nvim otherwise you need to set timeoutlen=300 at `lua/core/options.lua`
+}
+
+tools["folke/which-key.nvim"] = {
+	opt = false,
+	config = conf.which_key,
+}
+tools["mrjones2014/legendary.nvim"] = {
+	opt = true,
+	cmd = "Legendary",
+	config = conf.legendary,
+	requires = {
+		{ "stevearc/dressing.nvim", opt = false, config = conf.dressing },
+	},
 }
 
 return tools

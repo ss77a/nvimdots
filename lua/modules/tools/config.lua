@@ -29,12 +29,10 @@ function config.telescope()
 			entry_prefix = " ",
 			scroll_strategy = "limit",
 			results_title = false,
-			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 			layout_strategy = "horizontal",
 			path_display = { "absolute" },
 			file_ignore_patterns = { ".git/", ".cache", "%.class", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
 			layout_config = {
-				prompt_position = "bottom",
 				horizontal = {
 					preview_width = 0.5,
 				},
@@ -152,41 +150,6 @@ function config.sniprun()
 	})
 end
 
-function config.which_key()
-	local icons = {
-		ui = require("modules.ui.icons").get("ui"),
-		misc = require("modules.ui.icons").get("misc"),
-	}
-
-	require("which-key").setup({
-		plugins = {
-			presets = {
-				operators = false,
-				motions = false,
-				text_objects = false,
-				windows = false,
-				nav = false,
-				z = true,
-				g = true,
-			},
-		},
-
-		icons = {
-			breadcrumb = icons.ui.Separator,
-			separator = icons.misc.Vbar,
-			group = icons.misc.Add,
-		},
-
-		window = {
-			border = "none",
-			position = "bottom",
-			margin = { 1, 0, 1, 0 },
-			padding = { 1, 1, 1, 1 },
-			winblend = 0,
-		},
-	})
-end
-
 function config.wilder()
 	local wilder = require("wilder")
 	local icons = { ui = require("modules.ui.icons").get("ui") }
@@ -254,8 +217,6 @@ function config.webtools()
 	})
 end
 
-
-
 function config.packageInfo()
 	require('package-info').setup({
 		colors = {
@@ -277,6 +238,167 @@ function config.packageInfo()
 		-- `yarn.lock` or `package-lock.json`. If none are found it will use the
 		-- provided one, if nothing is provided it will use `yarn`
 		package_manager = "pnpm",
+    });
+end
+
+function config.which_key()
+	local icons = {
+		ui = require("modules.ui.icons").get("ui"),
+		misc = require("modules.ui.icons").get("misc"),
+	}
+
+	require("which-key").setup({
+		plugins = {
+			presets = {
+				operators = false,
+				motions = false,
+				text_objects = false,
+				windows = false,
+				nav = false,
+				z = true,
+				g = true,
+			},
+		},
+
+		icons = {
+			breadcrumb = icons.ui.Separator,
+			separator = icons.misc.Vbar,
+			group = icons.misc.Add,
+		},
+
+		window = {
+			border = "none",
+			position = "bottom",
+			margin = { 1, 0, 1, 0 },
+			padding = { 1, 1, 1, 1 },
+			winblend = 0,
+		},
+	})
+end
+
+function config.legendary()
+	require("legendary").setup({
+		which_key = {
+			auto_register = true,
+			do_binding = false,
+		},
+		scratchpad = {
+			view = "float",
+			results_view = "float",
+			keep_contents = true,
+		},
+	})
+
+	require("which-key").register({
+		["<leader>"] = {
+			b = {
+				name = "Bufferline commands",
+				d = "buffer: Sort by directory",
+				e = "buffer: Sort by extension",
+			},
+
+			d = {
+				name = "Dap commands",
+				b = "debug: Toggle breakpoint",
+				d = "debug: Terminate debug session",
+				r = "debug: Continue",
+				l = "debug: Open repl",
+				i = "debug: Step in",
+				o = "debug: Step out",
+				v = "debug: Step over",
+			},
+			f = {
+				name = "Telescope commands",
+				p = "find: Project",
+				w = "find: Word",
+				r = "find: File by frecency",
+				e = "find: File by history",
+				c = "ui: Change color scheme",
+				z = "edit: Change current directory by zoxide",
+				f = "find: File under current work directory",
+				g = "find: File under current git directory",
+				n = "edit: New file",
+			},
+			h = {
+				name = "Gitsigns commands",
+				b = "git: Blame line",
+				p = "git: Preview hunk",
+				s = "git: Stage hunk",
+				u = "git: Undo stage hunk",
+				r = "git: Reset hunk",
+				R = "git: Reset buffer",
+			},
+			l = {
+				name = "LSP commands",
+				i = "lsp: LSP Info",
+				r = "lsp: LSP Restart",
+			},
+			n = {
+				name = "NvimTree commands",
+				f = "filetree: NvimTree find file",
+				r = "filetree: NvimTree refresh",
+			},
+			p = {
+				name = "Packer commands",
+				s = "packer: PackerSync",
+				i = "packer: PackerInstall",
+				c = "packer: PackerClean",
+				u = "packer: PackerUpdate",
+			},
+			s = {
+				name = "Session commands",
+				s = "sesson: Save session",
+				r = "sesson: Restore session",
+				d = "sesson: Delete session",
+			},
+			t = {
+				name = "Trouble commands",
+				d = "lsp: show document diagnostics",
+				w = "lsp: show workspace diagnostics",
+				q = "lsp: show quickfix list",
+				l = "lsp: show loclist",
+			},
+		},
+		["g"] = {
+			c = "lsp: Code action",
+			d = "lsp: Preview definition",
+			D = "lsp: Goto definition",
+			h = "lsp: Show reference",
+			r = "lsp: Rename",
+			s = "lsp: Signature help",
+			t = "lsp: Toggle trouble list",
+			b = "buffer: Buffer pick",
+			p = {
+				name = "git commands",
+				s = "git: push",
+				l = "git: pull",
+			},
+		},
+		["<leader>G"] = "git: Show fugitive",
+		["<leader>g"] = "git: Show lazygit",
+		["<leader>D"] = "git: Show diff",
+		["<leader><leader>D"] = "git: Close diff",
+		["g["] = "lsp: Goto prev diagnostic",
+		["g]"] = "lsp: Goto next diagnostic",
+		["<leader>w"] = "jump: Goto word",
+		["<leader>j"] = "jump: Goto line",
+		["<leader>k"] = "jump: Goto line",
+		["<leader>c"] = "jump: Goto one char",
+		["<leader>cc"] = "jump: Goto two chars",
+		["<leader>o"] = "edit: Check spell",
+	})
+end
+
+function config.dressing()
+	require("dressing").setup({
+		input = {
+			enabled = true,
+		},
+		select = {
+			enabled = true,
+			backend = "telescope",
+			trim_prompt = true,
+		},
 	})
 end
 

@@ -71,7 +71,7 @@ function config.nvim_treesitter()
 		rainbow = {
 			enable = true,
 			extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
-			max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
+			max_file_lines = 2000, -- Do not enable for files with more than 2000 lines, int
 		},
 		context_commentstring = { enable = true, enable_autocmd = false },
 		matchup = { enable = true },
@@ -512,7 +512,7 @@ end
 function config.better_escape()
 	require("better_escape").setup({
 		mapping = { "jk", "jj" }, -- a table with mappings to use
-		timeout = vim.o.timeoutlen, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
+		timeout = 500, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
 		clear_empty_lines = false, -- clear line after escaping if there is only whitespace
 		keys = "<Esc>", -- keys used for escaping, if it is a function will use the result everytime
 		-- example(recommended)
@@ -630,6 +630,18 @@ function config.substitute()
 	vim.keymap.set("n", "txx", "<cmd>lua require('substitute.exchange').line()<cr>", { noremap = true })
 	vim.keymap.set("x", "X", "<cmd>lua require('substitute.exchange').visual()<cr>", { noremap = true })
 	vim.keymap.set("n", "txc", "<cmd>lua require('substitute.exchange').cancel()<cr>", { noremap = true })
+end
+
+function config.clever_f()
+	vim.api.nvim_set_hl(
+		0,
+		"CleverChar",
+		{ underline = true, bold = true, fg = "Orange", bg = "NONE", ctermfg = "Red", ctermbg = "NONE" }
+	)
+	vim.g.clever_f_mark_char_color = "CleverChar"
+	vim.g.clever_f_mark_direct_color = "CleverChar"
+	vim.g.clever_f_mark_direct = true
+	vim.g.clever_f_timeout_ms = 1500
 end
 
 function config.smartyank()
