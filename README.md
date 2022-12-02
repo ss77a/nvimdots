@@ -25,11 +25,11 @@ Chinese introduction is [here](https://zhuanlan.zhihu.com/p/382092667).
 
 **Pros**:
 
--   Fast. Less than **30ms** to start (Depends on SSD and CPU, tested on Zephyrus G14 2022 version).
--   Simple. Run out of the box.
--   Modern. Pure lua to config.
--   Modular. Easy to customize.
--   Powerful. Full functionality to code.
+- Fast. Less than **30ms** to start (Depends on SSD and CPU, tested on Zephyrus G14 2022 version).
+- Simple. Run out of the box.
+- Modern. Pure lua to config.
+- Modular. Easy to customize.
+- Powerful. Full functionality to code.
 
 ![startup time](https://raw.githubusercontent.com/ayamir/blog-imgs/main/startuptime.png)
 
@@ -37,10 +37,20 @@ Chinese introduction is [here](https://zhuanlan.zhihu.com/p/382092667).
 
 (Tested with [rhysd/vim-startuptime](https://github.com/rhysd/vim-startuptime))
 
+# todo
+
+the package.json reading plugin is having issues think that nui is itself not working
+null-ls-embedded
+review other projects added to
+https://github.com/stars/ss77a/lists/nvim
+review my old configs (nvchad|monrepo|others)
+inviestigate other repos
+
 # Details
 
 Please **make sure** to follow [wiki](https://github.com/ayamir/nvimdots/wiki) to install.
 
 # Acknowledgement
 
--   [glepnir/nvim](https://github.com/glepnir/nvim)
+- [glepnir/nvim](https://github.com/glepnir/nvim)
+
