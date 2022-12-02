@@ -1,4 +1,15 @@
-# Introduction
+# Introduction v0.0.1
+
+Idea is that all regular development cycle tools will work within nvim and can
+manage projects and helpout in a range of creative and useful means.
+Expident you might say!!
+
+This project is the work of ayamir, any issues or errors are added by me.
+Using this editor setup may cause istances of major annoyance and/or delay
+(maybe even crash your system) you may hate or love my changes. its a work in process.
+
+At time of writing everything is working so smooth its a sheer joy and much
+faster than vscode.
 
 ![Dashboard](https://raw.githubusercontent.com/ayamir/blog-imgs/main/dashboard.png)
 
@@ -39,6 +50,12 @@ Chinese introduction is [here](https://zhuanlan.zhihu.com/p/382092667).
 
 # todo
 
+disable the themes that ar painful
+load a different flavour of catppuccin for different files - add toyko night
+customise the latte and frappe flavours more make the latte less painfull
+expand readme add new things and info
+change some screenshots
+find the alpha config I want
 the package.json reading plugin is having issues think that nui is itself not working
 null-ls-embedded
 review other projects added to
@@ -53,4 +70,3 @@ Please **make sure** to follow [wiki](https://github.com/ayamir/nvimdots/wiki) t
 # Acknowledgement
 
 - [glepnir/nvim](https://github.com/glepnir/nvim)
-
