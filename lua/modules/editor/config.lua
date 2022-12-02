@@ -109,6 +109,29 @@ function config.illuminate()
 	})
 end
 
+function config.tsPlayground()
+	require("nvim-treesitter.configs").setup({
+		playground = {
+			enable = true,
+			disable = {},
+			updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+			persist_queries = false, -- Whether the query persists across vim sessions
+			keybindings = {
+				toggle_query_editor = "o",
+				toggle_hl_groups = "i",
+				toggle_injected_languages = "t",
+				toggle_anonymous_nodes = "a",
+				toggle_language_display = "I",
+				focus_language = "f",
+				unfocus_language = "F",
+				update = "R",
+				goto_node = "<cr>",
+				show_help = "?",
+			},
+		},
+	})
+end
+
 function config.nvim_comment()
 	require("nvim_comment").setup({
 		hook = function()
@@ -607,15 +630,6 @@ function config.substitute()
 	vim.keymap.set("n", "txx", "<cmd>lua require('substitute.exchange').line()<cr>", { noremap = true })
 	vim.keymap.set("x", "X", "<cmd>lua require('substitute.exchange').visual()<cr>", { noremap = true })
 	vim.keymap.set("n", "txc", "<cmd>lua require('substitute.exchange').cancel()<cr>", { noremap = true })
-end
-
-function config.neotree()
-	require("neo-tree").setup({
-		source_selector = {
-			winbar = false,
-			statusline = false,
-		},
-	})
 end
 
 function config.smartyank()

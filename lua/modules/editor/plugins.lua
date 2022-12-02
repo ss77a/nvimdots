@@ -47,6 +47,11 @@ editor["David-Kunz/markid"] = {
 	after = "nvim-treesitter",
 	--config = conf.markid,
 }
+editor["nvim-treesitter/playground"] = {
+	opt = true,
+	after = "nvim-treesitter",
+	--config = conf.ts-playground,
+}
 editor["rainbowhxch/accelerated-jk.nvim"] = { opt = true, event = "BufWinEnter", config = conf.accelerated_jk }
 editor["hrsh7th/vim-eft"] = { opt = true, event = "BufReadPost" }
 editor["romainl/vim-cool"] = {
@@ -137,11 +142,6 @@ editor["wuelnerdotexe/vim-astro"] = {
 editor["gbprod/substitute.nvim"] = {
 	opt = true,
 	config = conf.substitute,
-}
-editor["nvim-neo-tree/neo-tree.nvim"] = {
-	opt = false,
-	module = "neotree",
-	config = conf.neotree,
 }
 editor["SmiteshP/nvim-navic"] = {
 	opt = false,

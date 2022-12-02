@@ -53,4 +53,12 @@ tools["ray-x/web-tools.nvim"] = {
 	config = conf.webtool,
 }
 
+tools["vuki656/package-info.nvim"] = {
+	module = "package-info",
+	cmd = "PackageInfo",
+	opt = false,
+	config = conf.packageInfo,
+	requires = { { "MunifTanjim/nui.nvim", opt = false} },
+}
+
 return tools
