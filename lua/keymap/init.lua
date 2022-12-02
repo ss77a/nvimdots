@@ -67,10 +67,10 @@ local plug_map = {
 	["n|<leader>cw"] = map_cr("TroubleToggle workspace_diagnostics"):with_noremap():with_silent(),
 	["n|<leader>cq"] = map_cr("TroubleToggle quickfix"):with_noremap():with_silent(),
 	["n|<leader>cl"] = map_cr("TroubleToggle loclist"):with_noremap():with_silent(),
-	-- Plugin nvim-tree
-	["n|<C-n>"] = map_cr("NvimTreeToggle"):with_noremap():with_silent(),
-	["n|<Leader>nf"] = map_cr("NvimTreeFindFile"):with_noremap():with_silent(),
-	["n|<Leader>nr"] = map_cr("NvimTreeRefresh"):with_noremap():with_silent(),
+	-- Plugin neo-tree
+	["n|<C-n>"] = map_cr("Neotree"):with_noremap():with_silent(),
+	["n|<Leader>ng"] = map_cr("Neotree git_status"):with_noremap():with_silent(),
+	["n|<Leader>nq"] = map_cr("Neotree close"):with_noremap():with_silent(),
 	-- Plugin Undotree
 	["n|<Leader>u"] = map_cr("UndotreeToggle"):with_noremap():with_silent(),
 	-- Plugin Telescope
@@ -135,6 +135,16 @@ local plug_map = {
 	-- Plugin Diffview
 	["n|<leader>D"] = map_cr("DiffviewOpen"):with_silent():with_noremap(),
 	["n|<leader><leader>D"] = map_cr("DiffviewClose"):with_silent():with_noremap(),
+	-- -- package info
+	["n|<leader>ns"] = map_cmd("<Esc><Cmd>lua require('package-info').show()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>nc"] = map_cmd("<Esc><Cmd>lua require('package-info').hide()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>nt"] = map_cmd("<Esc><Cmd>lua require('package-info').toggle()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>nu"] = map_cmd("<Esc><Cmd>lua require('package-info').update()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>nd"] = map_cmd("<Esc><Cmd>lua require('package-info').delete()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>ni"] = map_cmd("<Esc><Cmd>lua require('package-info').install()<Cr>"):with_noremap():with_silent(),
+	["n|<leader>nv"] = map_cmd("<Esc><Cmd>lua require('package-info').change_version()<Cr>")
+		:with_noremap()
+		:with_silent(),
 }
 
 bind.nvim_load_mapping(plug_map)
