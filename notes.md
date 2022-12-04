@@ -41,6 +41,7 @@ null-ls-embedded
 
 ## testing
 
+perhaps selene or something
 wow oh my wow - testing for anything and very nice interace
 https://alpha2phi.medium.com/neovim-for-beginners-test-debugging-and-automation-e39eb5322841
 
@@ -49,6 +50,7 @@ need to find way to make that package.json plugin plug into the system
 ## telescope
 
 fzf - aint even working entirely or perhaps even at all (tbh scope of telescope itself baffles me more than somewhat)
+i have attempted to setup an alternative approach that address the issues i might be facing but im wander in the darkness
 media files
 project - certain files exist in tandem or conjuction with optional additions makes directory a project
 find way to auto indentify these folders and index them so they are used in fzf and then also in neovim
@@ -58,6 +60,10 @@ package.json access in telescope would be awesome (nui provides another way to o
 
 some are just plain horrid. I want those gone and never ever seen again
 only just selected themes - how?
+
+## docker
+
+for testing so my config does not break test new tweaks in a docker instance
 
 ## exiting
 

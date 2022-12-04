@@ -85,6 +85,40 @@ function config.nvim_treesitter()
 	end
 end
 
+function config.secretary()
+	require("query-secretary").setup({
+		open_win_opts = {
+			row = 0,
+			col = 9999,
+			width = 50,
+			height = 15,
+		},
+
+		-- other options you can customize
+		buf_set_opts = {
+			tabstop = 2,
+			softtabstop = 2,
+			shiftwidth = 2,
+		},
+
+		capture_group_names = { "cap", "second", "third" }, -- when press "c"
+		predicates = { "eq", "any-of", "contains", "match", "lua-match" }, -- when press "p"
+		visual_hl_group = "Visual", -- when moving cursor around
+
+		-- here are the default keymaps
+		keymaps = {
+			close = { "q", "Esc" },
+			next_predicate = { "p" },
+			previous_predicate = { "P" },
+			remove_predicate = { "d" },
+			toggle_field_name = { "f" },
+			yank_query = { "y" },
+			next_capture_group = { "c" },
+			previous_capture_group = { "C" },
+		},
+	})
+end
+
 function config.illuminate()
 	require("illuminate").configure({
 		providers = {
@@ -157,6 +191,35 @@ function config.autotag()
 	})
 end
 
+function config.colorpicker()
+	local opts = { noremap = true, silent = true }
+
+	vim.keymap.set("n", "<C-c>", "<cmd>PickColor<cr>", opts)
+	vim.keymap.set("i", "<C-c>", "<cmd>PickColorInsert<cr>", opts)
+
+	-- vim.keymap.set("n", "your_keymap", "<cmd>ConvertHEXandRGB<cr>", opts)
+	-- vim.keymap.set("n", "your_keymap", "<cmd>ConvertHEXandHSL<cr>", opts)
+
+	require("color-picker").setup({ -- for changing icons & mappings
+		-- ["icons"] = { "ﱢ", "" },
+		-- ["icons"] = { "ﮊ", "" },
+		-- ["icons"] = { "", "ﰕ" },
+		-- ["icons"] = { "", "" },
+		-- ["icons"] = { "", "" },
+		["icons"] = { "ﱢ", "" },
+		["border"] = "rounded", -- none | single | double | rounded | solid | shadow
+		["keymap"] = { -- mapping example:
+			["U"] = "<Plug>ColorPickerSlider5Decrease",
+			["O"] = "<Plug>ColorPickerSlider5Increase",
+		},
+		["background_highlight_group"] = "Normal", -- default
+		["border_highlight_group"] = "FloatBorder", -- default
+		["text_highlight_group"] = "Normal", --default
+	})
+
+	vim.cmd([[hi FloatBorder guibg=NONE]]) -- if you don't want weird border background colors around the popup.
+end
+
 function config.nvim_colorizer()
 	require("colorizer").setup({
 		RGB = true, -- #RGB hex codes
@@ -170,6 +233,186 @@ function config.nvim_colorizer()
 		-- Available modes: foreground, background
 		mode = "background", -- Set the display mode.
 	})
+end
+
+function config.minimap()
+	-- for shorthand usage
+	local nm = require("neo-minimap")
+
+	-- will reload your neo-minimap config file on save
+	-- works only when you have only 1 neo-minimap config file
+	nm.source_on_save("/home/sam/.nvim/data/minimap") -- optional
+
+	-- borrowed from creator -- need to add astro, etc
+
+	-- Lua
+	nm.set({ "zi", "zo", "zu" }, "*.lua", {
+		events = { "BufEnter" },
+
+		query = {
+			[[
+    ;; query
+    ((function_declaration) @cap)
+    ((assignment_statement(expression_list((function_definition) @cap))))
+    ]],
+			1,
+			[[
+    ;; query
+    ((function_declaration) @cap)
+    ((assignment_statement(expression_list((function_definition) @cap))))
+    ((field (identifier) @cap) (#eq? @cap "keymaps"))
+    ]],
+			[[
+    ;; query
+    ((for_statement) @cap)
+    ((function_declaration) @cap)
+    ((assignment_statement(expression_list((function_definition) @cap))))
+    ((function_call (identifier)) @cap (#vim-match? @cap "^__*" ))
+    ((function_call (dot_index_expression) @field (#eq? @field "vim.keymap.set")) @cap)
+    ]],
+			[[
+    ;; query
+    ((for_statement) @cap)
+    ((function_declaration) @cap)
+    ((assignment_statement(expression_list((function_definition) @cap))))
+    ]],
+		},
+
+		regex = {
+			{},
+			{ [[^\s*---*\s\+\w\+]], [[--\s*=]] },
+			{ [[^\s*---*\s\+\w\+]], [[--\s*=]] },
+			{},
+		},
+
+		search_patterns = {
+			{ "function", "<C-j>", true },
+			{ "function", "<C-k>", false },
+			{ "keymap", "<A-j>", true },
+			{ "keymap", "<A-k>", false },
+		},
+
+		-- auto_jump = false,
+		-- open_win_opts = { border = "double" },
+		win_opts = { scrolloff = 1 },
+
+		-- disable_indentaion = true,
+	})
+
+	-- Typescript React javascript typescript
+	nm.set("zi", { "typescriptreact", "javascriptreact", "javascript", "typescript" }, {
+		query = [[
+;; query
+((function_declaration) @cap)
+((arrow_function) @cap)
+((identifier) @cap (#vim-match? @cap "^use.*"))
+  ]],
+	})
+
+	-- example
+	nm.set({ "zi", "zo" }, { "*.astro" }, {
+		events = { "BufEnter" },
+
+		-- lua table, values inside can be type `string` or `number`
+		-- accepts multiple treesitter queries, corresponse to each keymap,
+		-- if you press "keymap1", minimap will start with first query,
+		-- if you press "keymap2", minimap will start with second query,
+		-- you can have empty query table option if you want to use regex only
+		query = {
+			[[
+        ;; query
+        ((function_declaration) @cap)
+        ((assignment_statement(expression_list((function_definition) @cap))))
+        ]], -- first query
+			[[
+        ;; query
+        ((function_declaration) @cap)
+        ((assignment_statement(expression_list((function_definition) @cap))))
+        ((for_statement) @cap)
+        ]], -- second query
+
+			1, -- if passed in a number, a query with that index will take it's place
+			-- in this case, instead of copying the entire first query,
+			-- we use `1` to point to it.
+		},
+
+		-- optional
+		regex = { -- lua table, values inside can be type `table` or `number`
+			{ [[--.*]], [[===.*===]] }, -- first set of regexes
+			{}, -- no regex
+			1, -- acts as first regex set
+		},
+		-- you can have empty regex option if you want to use Treesitter queries only
+
+		-- optional
+		search_patterns = {
+			{ "vim_regex", "<C-j>", true }, -- jump to the next instance of "vim_regex"
+			{ "vim_regex", "<C-k>", false }, -- jump to the previous instance of "vim_regex"
+		},
+
+		auto_jump = true, -- optional, defaults to `true`, auto jump when move cursor
+
+		-- other options
+		width = 44, -- optional, defaults to 44, width of the minimap
+		height = 12, -- optional, defaults to 12, height of the minimap
+		hl_group = "my_hl_group", -- highlight group of virtual text, optional, defaults to "DiagnosticWarn"
+
+		open_win_opts = {}, -- optional, for setting custom `nvim_open_win` options
+		win_opts = {}, -- optional, for setting custom `nvim_win_set_option` options
+
+		-- change minimap's height with <C-h>
+		-- this means default minimap height is 12
+		-- minimap height will change to 36 after pressing <C-h>
+		height_toggle = { 12, 36 },
+
+		disable_indentation = false, -- if `true`, will remove any white space / tab at the start of the results.
+	})
+end
+
+function config.treesitter_surfer()
+	-- Syntax Tree Surfer
+	local opts = { noremap = true, silent = true }
+
+	-- Normal Mode Swapping:
+	-- Swap The Master Node relative to the cursor with it's siblings, Dot Repeatable
+	vim.keymap.set("n", "vU", function()
+		vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot"
+		return "g@l"
+	end, { silent = true, expr = true })
+	vim.keymap.set("n", "vD", function()
+		vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot"
+		return "g@l"
+	end, { silent = true, expr = true })
+
+	-- Swap Current Node at the Cursor with it's siblings, Dot Repeatable
+	vim.keymap.set("n", "vd", function()
+		vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot"
+		return "g@l"
+	end, { silent = true, expr = true })
+	vim.keymap.set("n", "vu", function()
+		vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot"
+		return "g@l"
+	end, { silent = true, expr = true })
+
+	--> If the mappings above don't work, use these instead (no dot repeatable)
+	-- vim.keymap.set("n", "vd", '<cmd>STSSwapCurrentNodeNextNormal<cr>', opts)
+	-- vim.keymap.set("n", "vu", '<cmd>STSSwapCurrentNodePrevNormal<cr>', opts)
+	-- vim.keymap.set("n", "vD", '<cmd>STSSwapDownNormal<cr>', opts)
+	-- vim.keymap.set("n", "vU", '<cmd>STSSwapUpNormal<cr>', opts)
+
+	-- Visual Selection from Normal Mode
+	vim.keymap.set("n", "vx", "<cmd>STSSelectMasterNode<cr>", opts)
+	vim.keymap.set("n", "vn", "<cmd>STSSelectCurrentNode<cr>", opts)
+
+	-- Select Nodes in Visual Mode
+	vim.keymap.set("x", "J", "<cmd>STSSelectNextSiblingNode<cr>", opts)
+	vim.keymap.set("x", "K", "<cmd>STSSelectPrevSiblingNode<cr>", opts)
+	vim.keymap.set("x", "H", "<cmd>STSSelectParentNode<cr>", opts)
+	vim.keymap.set("x", "L", "<cmd>STSSelectChildNode<cr>", opts)
+
+	-- Swapping Nodes in Visual Mode
+	vim.keymap.set("x", "<A-j>", "<cmd>STSSwapNextVisual<cr>", opts)
+	vim.keymap.set("x", "<A-k>", "<cmd>STSSwapPrevVisual<cr>", opts)
 end
 
 function config.neoscroll()
@@ -194,6 +437,12 @@ function config.neoscroll()
 		easing_function = nil, -- Default easing function
 		pre_hook = nil, -- Function to run before the scrolling animation starts
 		post_hook = nil, -- Function to run after the scrolling animation ends
+	})
+end
+
+function config.icon_picker()
+	require("icon-picker").setup({
+		disable_legacy_commands = true,
 	})
 end
 
