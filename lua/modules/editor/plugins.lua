@@ -52,6 +52,42 @@ editor["nvim-treesitter/playground"] = {
 	after = "nvim-treesitter",
 	--config = conf.ts-playground,
 }
+
+editor["ziontee113/neo-minimap"] = {
+	opt = true,
+	--as = "minimap",
+	--cmd = "minimap",
+	after = "nvim-treesitter",
+	config = conf.minimap,
+}
+
+editor["ziontee113/color-picker.nvim"] = {
+	opt = true,
+	--as = "colorpicker",
+	--cmd = "colorpicker",
+	after = "nvim-treesitter",
+	config = conf.colorpicker,
+}
+
+editor["ziontee113/icon-picker.nvim"] = {
+	opt = true,
+	config = conf.icon_picker,
+}
+
+editor["ziontee113/query-secretary"] = {
+	opt = true,
+	after = "nvim-treesitter",
+	config = conf.secretary,
+}
+
+editor["ziontee113/syntax-tree-surfer"] = {
+	opt = true,
+	--as = "ssurfer",
+	--cmd = "ssurfer",
+	after = "nvim-treesitter",
+	config = conf.treesitter_surfer,
+}
+
 editor["rainbowhxch/accelerated-jk.nvim"] = { opt = true, event = "BufWinEnter", config = conf.accelerated_jk }
 editor["hrsh7th/vim-eft"] = { opt = true, event = "BufReadPost" }
 editor["rainbowhxch/accelerated-jk.nvim"] = {

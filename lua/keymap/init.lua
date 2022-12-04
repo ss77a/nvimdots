@@ -60,8 +60,8 @@ local plug_map = {
 	["n|<leader>g"] = map_cr("lua toggle_lazygit()"):with_noremap():with_silent(),
 	["t|<leader>g"] = map_cmd("<Esc><Cmd>lua toggle_lazygit()<CR>"):with_noremap():with_silent(),
 	["n|<leader>G"] = map_cu("Git"):with_noremap():with_silent(),
-    -- Plugin Neotree
-    ["n|<C-n>"] = map_cr("Neotree"):with_noremap():with_silent(),
+	-- Plugin Neotree
+	["n|<C-n>"] = map_cr("Neotree"):with_noremap():with_silent(),
 	["n|<Leader>ng"] = map_cr("Neotree git_status"):with_noremap():with_silent(),
 	["n|<Leader>nq"] = map_cr("Neotree close"):with_noremap():with_silent(),
 	-- Plugin trouble
@@ -144,6 +144,7 @@ local plug_map = {
 		:with_silent(),
 	-- Plugin Legendary
 	["n|<C-p>"] = map_cr("Legendary"):with_silent():with_noremap(),
+	["n|ts"] = map_cmd("<Esc><Cmd>lua require('query-secretary').query_window_initiate()"):with_noremap(),
 }
 
 bind.nvim_load_mapping(plug_map)
