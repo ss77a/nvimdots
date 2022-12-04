@@ -63,6 +63,9 @@ https://github.com/stars/ss77a/lists/nvim
 review my old configs (nvchad|monrepo|others)
 inviestigate other repos
 
+plugins
+ghosttext
+
 # Details
 
 Please **make sure** to follow [wiki](https://github.com/ayamir/nvimdots/wiki) to install.
