@@ -4,6 +4,16 @@ local conf = require("modules.ui.config")
 ui["kyazdani42/nvim-web-devicons"] = { opt = false }
 ui["shaunsingh/nord.nvim"] = { opt = false, config = conf.nord }
 ui["sainnhe/edge"] = { opt = false, config = conf.edge }
+ui["folke/paint.nvim"] = {
+	opt = false,
+	as = "paint",
+	config = conf.paint,
+}
+ui["folke/tokyonight.nvim"] = {
+	opt = false,
+	as = "toykonight",
+	config = conf.toykonight,
+}
 ui["catppuccin/nvim"] = {
 	opt = false,
 	as = "catppuccin",
@@ -105,4 +115,9 @@ ui["nvim-neo-tree/neo-tree.nvim"] = {
 	},
 }
 
+ui["tamton-aquib/zone.nvim"] = {
+	opt = false,
+	as = zone,
+	config = conf.zone,
+}
 return ui
