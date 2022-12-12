@@ -120,9 +120,11 @@ ui["nvim-neo-tree/neo-tree.nvim"] = {
 	},
 }
 
+--[[
 ui["tamton-aquib/zone.nvim"] = {
-	opt = false,
+	opt = true,
 	as = zone,
 	config = conf.zone,
 }
+--]]
 return ui
