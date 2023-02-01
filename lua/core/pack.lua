@@ -81,7 +81,7 @@ function Packer:load_packer()
 end
 
 function Packer:init_ensure_plugins()
-	local packer_dir = data_dir .. "pack/packer/opt/packer.nvim"
+	local packer_dir = data_dir .. "pack/packer-dev/opt/packer.nvim"
 	local state = uv.fs_stat(packer_dir)
 	if not state then
 		local cmd = (
