@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # We don't need return codes for "$(command)", only stdout is needed.
 # Allow `[[ -n "$(command)" ]]`, `func "$(command)"`, pipes, etc.
@@ -8,6 +8,8 @@ set -u
 
 # global vars
 DEST_DIR="${HOME}/.config/nvim"
+BACKUP_DIR="${DEST_DIR}_backup-$(date +%Y%m%dT%H%M%S)"
+CLONE_ATTR=("--progress")
 REQUIRED_NVIM_VERSION=0.8
 USE_SSH=1
 
@@ -21,6 +23,11 @@ abort() {
 # shellcheck disable=SC2292
 if [ -z "${BASH_VERSION:-}" ]; then
 	abort "Bash is required to interpret this script."
+fi
+
+# Check if script is run with force-interactive mode in CI
+if [[ -n "${CI-}" && -n "${INTERACTIVE-}" ]]; then
+	abort "Cannot run force-interactive mode in CI."
 fi
 
 # string formatters
@@ -73,6 +80,10 @@ warn() {
 	printf "${tty_yellow}Warning${tty_reset}: %s\n" "$(chomp "$1")"
 }
 
+warn_ext() {
+	printf "         %s\n" "$(chomp "$1")"
+}
+
 getc() {
 	local save_state
 	save_state="$(/bin/stty -g)"
@@ -104,6 +115,26 @@ version_ge() {
 	[[ "${1%.*}" -gt "${2%.*}" ]] || [[ "${1%.*}" -eq "${2%.*}" && "${1#*.}" -ge "${2#*.}" ]]
 }
 
+prompt_confirm() {
+	while true; do
+		read -r -p "$1 [Y/n]: " USR_CHOICE
+		case "$USR_CHOICE" in
+		[yY][eE][sS] | [yY])
+			return 1
+			;;
+		[nN][oO] | [nN])
+			return 0
+			;;
+		*)
+			if [[ -z "$USR_CHOICE" ]]; then
+				return 1
+			fi
+			printf "${tty_red}%s\n\n${tty_reset}" "Invalid input! Please enter one of: '[yY]/[yY][eE][sS] / [nN]/[nN][oO]'"
+			;;
+		esac
+	done
+}
+
 check_ssh() {
 	prompt "Validating SSH connection..."
 	ssh -T git@github.com &>/dev/null
@@ -111,13 +142,15 @@ check_ssh() {
 		prompt "We'll use HTTPS to fetch and update plugins."
 		return 0
 	else
-		printf "Do you prefer to use SSH to fetch and update plugins? (otherwise HTTPS) [Y/n] "
-		read -r USR_CHOICE
-		if [[ $USR_CHOICE == [nN] || $USR_CHOICE == [Nn][Oo] ]]; then
-			return 0
-		else
-			return 1
-		fi
+		prompt_confirm "Do you prefer to use SSH to fetch and update plugins? (otherwise HTTPS)"
+		return $?
+	fi
+}
+
+clone_pref() {
+	prompt "Checking 'git clone' preferences..."
+	if ! prompt_confirm "Would you like to perform a shallow clone ('--depth=1')?"; then
+		CLONE_ATTR+=("--depth=1")
 	fi
 }
 
@@ -130,6 +163,33 @@ is_latest() {
 		return 1
 	fi
 }
+
+# Check if both `INTERACTIVE` and `NONINTERACTIVE` are set
+# Always use single-quoted strings with `exp` expressions
+# shellcheck disable=SC2016
+if [[ -n "${INTERACTIVE-}" && -n "${NONINTERACTIVE-}" ]]; then
+	abort 'Both `$INTERACTIVE` and `$NONINTERACTIVE` are set. Please unset at least one variable and try again.'
+fi
+
+# Check if script is run non-interactively (e.g. CI)
+# If it is run non-interactively we should not prompt for confirmation.
+# Always use single-quoted strings with `exp` expressions
+# shellcheck disable=SC2016
+if [[ -z "${NONINTERACTIVE-}" ]]; then
+	if [[ -n "${CI-}" ]]; then
+		warn 'Running in non-interactive mode because `$CI` is set.'
+		NONINTERACTIVE=1
+	elif [[ ! -t 0 ]]; then
+		if [[ -z "${INTERACTIVE-}" ]]; then
+			warn 'Running in non-interactive mode because `stdin` is not a TTY.'
+			NONINTERACTIVE=1
+		else
+			warn 'Running in interactive mode despite `stdin` not being a TTY because `$INTERACTIVE` is set.'
+		fi
+	fi
+else
+	prompt 'Running in non-interactive mode because `$NONINTERACTIVE` is set.'
+fi
 
 if ! command -v perl >/dev/null; then
 	abort "$(
@@ -158,26 +218,35 @@ EOABORT
 	)"
 fi
 
-prompt "This script will install ss77a/nvimdots to:"
-echo "${DEST_DIR}"
-
-if [[ -d "${DEST_DIR}" ]]; then
-	warn "The destination folder: \"${DEST_DIR}\" already exists. We will make a backup for you under the same folder."
-fi
-
-ring_bell
-wait_for_user
-
-if check_ssh; then
+# Always use HTTPS when this script is run non-interactively (e.g. CI)
+if [[ -n "${NONINTERACTIVE-}" ]]; then
 	USE_SSH=0
 fi
 
+prompt "This script will install ayamir/nvimdots to:"
+echo "${DEST_DIR}"
+
 if [[ -d "${DEST_DIR}" ]]; then
-	execute "mv" "-f" "${DEST_DIR}" "${DEST_DIR}_$(date +%Y%m%dT%H%M%S)"
+	warn "The destination folder: \"${DEST_DIR}\" already exists."
+	warn_ext "We will make a backup for you at \"${BACKUP_DIR}\"."
+fi
+
+if [[ -z "${NONINTERACTIVE-}" ]]; then
+	ring_bell
+	wait_for_user
+
+	if check_ssh; then
+		USE_SSH=0
+	fi
+	clone_pref
+fi
+
+if [[ -d "${DEST_DIR}" ]]; then
+	execute "mv" "-f" "${DEST_DIR}" "${BACKUP_DIR}"
 fi
 
 prompt "Fetching in progress..."
-if [ "$USE_SSH" -eq "1" ]; then
+if [[ "$USE_SSH" -eq "1" ]]; then
 	if is_latest; then
 		execute "git" "clone" "-b" "main" "git@github.com:ss77a/nvimdots.git" "${DEST_DIR}"
 	else
@@ -197,13 +266,13 @@ fi
 
 cd "${DEST_DIR}" || return
 
-if [ "$USE_SSH" -eq "0" ]; then
+if [[ "$USE_SSH" -eq "0" ]]; then
 	prompt "Changing default fetching method to HTTPS..."
 	execute "perl" "-pi" "-e" "s/\[\"use_ssh\"\] \= true/\[\"use_ssh\"\] \= false/g" "${DEST_DIR}/lua/core/settings.lua"
 fi
 
 prompt "Spawning neovim and fetching plugins... (You'll be redirected shortly)"
-prompt "If packer failed to fetch any plugin(s), maunally execute \`nvim +PackerSync\` until everything is up-to-date."
+prompt "If lazy.nvim failed to fetch any plugin(s), maunally execute \`:Lazy sync\` until everything is up-to-date."
 cat <<EOS
 
 Thank you for using this set of configuration!
@@ -212,6 +281,9 @@ Thank you for using this set of configuration!
 - Further documentation (including executables you ${tty_bold}must${tty_reset} install for full functionality):
     ${tty_underline}https://github.com/ss77a/nvimdots/wiki/Prerequisites${tty_reset}
 EOS
-wait_for_user
 
-nvim +PackerSync
+if [[ -z "${NONINTERACTIVE-}" ]]; then
+	ring_bell
+	wait_for_user
+	nvim
+fi
