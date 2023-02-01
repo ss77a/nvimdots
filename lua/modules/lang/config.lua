@@ -1,9 +1,6 @@
 local config = {}
 
 function config.rust_tools()
-	vim.api.nvim_command([[packadd nvim-lspconfig]])
-	vim.api.nvim_command([[packadd lsp_signature.nvim]])
-
 	local opts = {
 		tools = { -- rust-tools options
 
@@ -21,7 +18,9 @@ function config.rust_tools()
 					fix_pos = true,
 					hint_enable = true,
 					hi_parameter = "Search",
-					handler_opts = { "double" },
+					handler_opts = {
+						border = "rounded",
+					},
 				})
 			end,
 
