@@ -13,7 +13,7 @@
     </a>
 </h1>
 
-# Introduction v0.0.1
+# Introduction v0.1.0
 
 Idea is that all regular development cycle tools will work within nvim and can
 manage projects and helpout in a range of creative and useful means.
