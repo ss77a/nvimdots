@@ -16,7 +16,7 @@ function config.rust_tools()
 			on_initialized = function()
 				require("lsp_signature").on_attach({
 					bind = true,
-					use_lspsaga = false,
+					use_lspsaga = true,
 					floating_window = true,
 					fix_pos = true,
 					hint_enable = true,
@@ -187,7 +187,7 @@ function config.rust_tools()
 end
 
 function config.packageInfo()
-	require('package-info').setup({
+	require("package-info").setup({
 		colors = {
 			up_to_date = "#3C4048", -- Text color for up to date dependency virtual text
 			outdated = "#d19a66", -- Text color for outdated dependency virtual text
