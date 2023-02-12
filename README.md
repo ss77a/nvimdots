@@ -1,5 +1,5 @@
 <h1 align="center">
-    nvimdots
+    ss77a/nvimdots -- version 0.2.1
     <br>
     <a href="https://github.com/neovim/neovim/releases/tag/stable">
     <img
@@ -86,6 +86,7 @@ plugins
 ghosttext
 
 # Details
+
 ```pwsh
 Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ayamir/nvimdots/HEAD/scripts/install.ps1'))
 ```
