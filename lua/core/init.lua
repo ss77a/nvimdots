@@ -1,5 +1,4 @@
 local global = require("core.global")
-local vim = vim
 
 -- Create cache dir and data dirs
 local createdir = function()
@@ -114,12 +113,10 @@ local clipboard_config = function()
 end
 
 local load_core = function()
-	local pack = require("core.pack")
 	createdir()
 	disable_distribution_plugins()
 	leader_map()
 
-	pack.ensure_plugins()
 	neovide_config()
 	clipboard_config()
 
@@ -127,10 +124,12 @@ local load_core = function()
 	require("core.mapping")
 	require("keymap")
 	require("core.event")
-	pack.load_compile()
+	require("core.pack")
 
-	-- vim.api.nvim_command([[set background=light]])
-	vim.api.nvim_command([[colorscheme catppuccin]])
+	local colorscheme = require("core.settings").colorscheme
+	local background = require("core.settings").background
+	vim.api.nvim_command("set background=" .. background)
+	vim.api.nvim_command("colorscheme " .. colorscheme)
 end
 
 load_core()
