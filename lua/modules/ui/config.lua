@@ -52,7 +52,7 @@ function config.alpha()
 		button("space f c", " Scheme change", leader, "<cmd>Telescope colorscheme<cr>"),
 		button("space f r", " File frecency", leader, "<cmd>Telescope frecency<cr>"),
 		button("space f e", " File history", leader, "<cmd>Telescope oldfiles<cr>"),
-		button("space f p", " Project find", leader, "<cmd>Telescope projects<cr>"),
+		button("space f p", " Project find", leader, "<cmd>Telescope project<cr>"),
 		button("space f f", " File find", leader, "<cmd>Telescope find_files<cr>"),
 		button("space f n", " File new", leader, "<cmd>enew<cr>"),
 		button("space f w", " Word find", leader, "<cmd>Telescope live_grep<cr>"),
@@ -60,8 +60,7 @@ function config.alpha()
 	dashboard.section.buttons.opts.hl = "String"
 
 	local function footer()
-		local stats = require("lazy").stats()
-		local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+		local total_plugins = #vim.tbl_keys(packer_plugins)
 		return "   Have Fun with neovim"
 			.. "   v"
 			.. vim.version().major
@@ -70,10 +69,8 @@ function config.alpha()
 			.. "."
 			.. vim.version().patch
 			.. "   "
-			.. stats.count
-			.. " plugins in "
-			.. ms
-			.. "ms"
+			.. total_plugins
+			.. " plugins"
 	end
 
 	dashboard.section.footer.val = footer()
@@ -94,14 +91,6 @@ function config.alpha()
 	}
 
 	alpha.setup(dashboard.opts)
-
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "LazyVimStarted",
-		callback = function()
-			dashboard.section.footer.val = footer()
-			pcall(vim.cmd.AlphaRedraw)
-		end,
-	})
 end
 
 function config.edge()
@@ -181,8 +170,6 @@ function config.toykonight()
 end
 
 function config.catppuccin()
-	local transparent_background = false -- Set background transparency here!
-
 	require("catppuccin").setup({
 		flavour = "mocha", -- Can be one of: latte, frappe, macchiato, mocha
 		background = { light = "latte", dark = "mocha" },
@@ -193,8 +180,7 @@ function config.catppuccin()
 			shade = "dark",
 			percentage = 0.15,
 		},
-		transparent_background = transparent_background,
-		show_end_of_buffer = false, -- show the '~' characters after the end of buffers
+		transparent_background = false,
 		term_colors = true,
 		compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
 		styles = {
@@ -228,46 +214,42 @@ function config.catppuccin()
 					information = { "underline" },
 				},
 			},
-			aerial = false,
-			barbar = false,
-			beacon = false,
-			cmp = true,
-			coc_nvim = false,
-			dap = { enabled = true, enable_ui = true },
-			dashboard = false,
-			fern = false,
-			fidget = true,
+			lsp_trouble = true,
+			lsp_saga = true,
 			gitgutter = false,
 			gitsigns = true,
-			harpoon = false,
+			telescope = true,
+			nvimtree = true,
+			which_key = true,
+			indent_blankline = { enabled = true, colored_indent_levels = false },
+			dashboard = true,
+			neogit = false,
+			vim_sneak = false,
+			fern = false,
+			barbar = false,
+			markdown = true,
+			lightspeed = false,
+			ts_rainbow = true,
+			mason = true,
+			neotest = false,
+			noice = false,
 			hop = true,
 			illuminate = true,
-			indent_blankline = { enabled = true, colored_indent_levels = false },
-			leap = false,
-			lightspeed = false,
-			lsp_saga = true,
-			lsp_trouble = true,
-			markdown = true,
-			mason = true,
-			mini = false,
-			navic = { enabled = true },
-			neogit = false,
-			neotest = false,
-			neotree = { enabled = false, show_root = true, transparent_panel = false },
-			noice = false,
+			cmp = true,
+			dap = { enabled = true, enable_ui = true },
 			notify = true,
-			nvimtree = true,
-			overseer = false,
-			pounce = false,
-			semantic_tokens = false,
 			symbols_outline = false,
+			coc_nvim = false,
+			leap = false,
+			neotree = { enabled = false, show_root = true, transparent_panel = false },
 			telekasten = false,
-			telescope = true,
-			treesitter_context = false,
-			ts_rainbow = true,
-			vim_sneak = false,
-			vimwiki = false,
-			which_key = true,
+			mini = false,
+			aerial = false,
+			vimwiki = true,
+			beacon = false,
+			navic = { enabled = false },
+			overseer = false,
+			fidget = true,
 		},
 		color_overrides = {
 			mocha = {
@@ -304,7 +286,6 @@ function config.catppuccin()
 			mocha = function(cp)
 				return {
 					-- For base configs.
-					NormalFloat = { fg = cp.text, bg = transparent_background and cp.none or cp.base },
 					CursorLineNr = { fg = cp.green },
 					Search = { bg = cp.surface1, fg = cp.pink, style = { "bold" } },
 					IncSearch = { bg = cp.pink, fg = cp.surface1 },
@@ -328,9 +309,6 @@ function config.catppuccin()
 					-- For fidget.
 					FidgetTask = { bg = cp.none, fg = cp.surface2 },
 					FidgetTitle = { fg = cp.blue, style = { "bold" } },
-
-					-- For trouble.nvim
-					TroubleNormal = { bg = cp.base },
 
 					-- For treesitter.
 					["@field"] = { fg = cp.rosewater },
@@ -370,7 +348,7 @@ function config.catppuccin()
 					-- ["@constant.macro"] = { fg = cp.mauve },
 
 					-- ["@label"] = { fg = cp.blue },
-					["@method"] = { fg = cp.blue, style = { "italic" } },
+					["@method"] = { style = { "italic" } },
 					["@namespace"] = { fg = cp.rosewater, style = {} },
 
 					["@punctuation.delimiter"] = { fg = cp.teal },
@@ -414,10 +392,7 @@ function config.catppuccin()
 					["@type.css"] = { fg = cp.lavender },
 					["@property.css"] = { fg = cp.yellow, style = { "italic" } },
 
-					["@type.builtin.c"] = { fg = cp.yellow, style = {} },
-
 					["@property.cpp"] = { fg = cp.text },
-					["@type.builtin.cpp"] = { fg = cp.yellow, style = {} },
 
 					-- ["@symbol"] = { fg = cp.flamingo },
 				}
@@ -427,8 +402,9 @@ function config.catppuccin()
 end
 
 function config.neodim()
-	local blend_color = require("modules.utils").hl_to_rgb("Normal", true)
-
+	vim.api.nvim_command([[packadd nvim-treesitter]])
+	local normal_background = vim.api.nvim_get_hl_by_name("Normal", true).background
+	local blend_color = normal_background ~= nil and string.format("#%06x", normal_background) or "#000000"
 	require("neodim").setup({
 		alpha = 0.45,
 		blend_color = blend_color,
@@ -460,8 +436,6 @@ function config.notify()
 		on_close = nil,
 		---@usage timeout for notifications in ms, default 5000
 		timeout = 2000,
-		-- @usage User render fps value
-		fps = 30,
 		-- Render function for notifications. See notify-render()
 		render = "default",
 		---@usage highlight behind the window for stages that change opacity
@@ -484,7 +458,6 @@ function config.notify()
 end
 
 function config.lualine()
-	local colors = require("modules.utils").get_palette()
 	local icons = {
 		diagnostics = require("modules.ui.icons").get("diagnostics", true),
 		misc = require("modules.ui.icons").get("misc", true),
@@ -494,31 +467,6 @@ function config.lualine()
 	local function escape_status()
 		local ok, m = pcall(require, "better_escape")
 		return ok and m.waiting and icons.misc.EscapeST or ""
-	end
-
-	local _cache = { context = "", bufnr = -1 }
-	local function lspsaga_symbols()
-		local exclude = {
-			["terminal"] = true,
-			["toggleterm"] = true,
-			["prompt"] = true,
-			["NvimTree"] = true,
-			["help"] = true,
-		}
-		if vim.api.nvim_win_get_config(0).zindex or exclude[vim.bo.filetype] then
-			return "" -- Excluded filetypes
-		else
-			local currbuf = vim.api.nvim_get_current_buf()
-			local ok, lspsaga = pcall(require, "lspsaga.symbolwinbar")
-			if ok and lspsaga:get_winbar() ~= nil then
-				_cache.context = lspsaga:get_winbar()
-				_cache.bufnr = currbuf
-			elseif _cache.bufnr ~= currbuf then
-				_cache.context = "" -- Reset [invalid] cache (usually from another buffer)
-			end
-
-			return _cache.context
-		end
 	end
 
 	local function diff_source()
@@ -534,12 +482,9 @@ function config.lualine()
 
 	local function get_cwd()
 		local cwd = vim.fn.getcwd()
-		local is_windows = require("core.global").is_windows
-		if not is_windows then
-			local home = require("core.global").home
-			if cwd:find(home, 1, true) == 1 then
-				cwd = "~" .. cwd:sub(#home + 1)
-			end
+		local home = os.getenv("HOME")
+		if cwd:find(home, 1, true) == 1 then
+			cwd = "~" .. cwd:sub(#home + 1)
 		end
 		return icons.ui.RootFolderOpened .. cwd
 	end
@@ -597,7 +542,7 @@ function config.lualine()
 		sections = {
 			lualine_a = { { "mode" } },
 			lualine_b = { { "branch" }, { "diff", source = diff_source } },
-			lualine_c = { lspsaga_symbols },
+			lualine_c = { { get_cwd } },
 			lualine_x = {
 				{ escape_status },
 				{
@@ -609,7 +554,6 @@ function config.lualine()
 						info = icons.diagnostics.Information,
 					},
 				},
-				{ get_cwd },
 			},
 			lualine_y = {
 				{ "filetype", colored = true, icon_only = true },
@@ -646,13 +590,6 @@ function config.lualine()
 			diffview,
 		},
 	})
-
-	-- Properly set background color for lspsaga
-	local winbar_bg = require("modules.utils").hl_to_rgb("StatusLine", true, colors.mantle)
-	for _, hlGroup in pairs(require("lspsaga.lspkind").get_kind()) do
-		require("modules.utils").extend_hl("LspSagaWinbar" .. hlGroup[1], { bg = winbar_bg })
-	end
-	require("modules.utils").extend_hl("LspSagaWinbarSep", { bg = winbar_bg })
 end
 
 function config.nvim_tree()
@@ -670,7 +607,7 @@ function config.nvim_tree()
 		disable_netrw = false,
 		hijack_cursor = true,
 		hijack_netrw = true,
-		hijack_unnamed_buffer_when_opening = true,
+		hijack_unnamed_buffer_when_opening = false,
 		ignore_buffer_on_setup = false,
 		open_on_setup = false,
 		open_on_setup_file = false,
@@ -784,8 +721,8 @@ function config.nvim_tree()
 					enable = true,
 					chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
 					exclude = {
-						filetype = { "notify", "qf", "diff", "fugitive", "fugitiveblame" },
-						buftype = { "terminal", "help" },
+						filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+						buftype = { "nofile", "terminal", "help" },
 					},
 				},
 			},
@@ -866,10 +803,11 @@ function config.nvim_bufferline()
 					padding = 1,
 				},
 				{
-					filetype = "lspsagaoutline",
-					text = "Lspsaga Outline",
+					filetype = "undotree",
+					text = "Undo Tree",
 					text_align = "center",
-					padding = 1,
+					highlight = "Directory",
+					separator = true,
 				},
 			},
 			diagnostics_indicator = function(count)
@@ -882,7 +820,8 @@ function config.nvim_bufferline()
 	}
 
 	if vim.g.colors_name == "catppuccin" then
-		local cp = require("modules.utils").get_palette() -- Get the palette.
+		local cp = require("catppuccin.palettes").get_palette() -- Get the palette.
+		cp.none = "NONE" -- Special setting for complete transparent fg/bg.
 
 		local catppuccin_hl_overwrite = {
 			highlights = require("catppuccin.groups.integrations.bufferline").get({
@@ -987,6 +926,7 @@ function config.indent_blankline()
 			"log",
 			"fugitive",
 			"gitcommit",
+			"packer",
 			"vimwiki",
 			"markdown",
 			"json",
@@ -998,6 +938,7 @@ function config.indent_blankline()
 			"peekaboo",
 			"git",
 			"TelescopePrompt",
+			"undotree",
 			"flutterToolsOutline",
 			"", -- for all buffers without a file type
 		},
