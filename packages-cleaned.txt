@@ -1,0 +1,21 @@
+     color-picker.nvim 
+     dressing.nvim 
+     icon-picker.nvim 
+     legendary.nvim 
+     markid 
+     neo-minimap 
+     neo-tree.nvim 
+     nvim-comment 
+     nvim-ts-hint-textobject 
+     package-info.nvim 
+     paint.nvim 
+     playground 
+     query-secretary 
+     substitute.nvim 
+     syntax-tree-surfer 
+     themer.lua 
+     tokyonight.nvim 
+     vim-astro 
+     vim-eft 
+     web-tools.nvim 
+  
