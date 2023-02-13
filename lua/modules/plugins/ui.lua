@@ -76,6 +76,8 @@ ui["folke/tokyonight.nvim"] = {
 }
 ui["roobert/tailwindcss-colorizer-cmp.nvim"] = {
 	opt = true,
+	as = "tailwindcss-colorizer-cmp",
+	module = "tailwindcss-colorizer-cmp",
 	config = require("ui.tw-colorizer"),
 }
 return ui
