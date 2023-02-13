@@ -69,4 +69,13 @@ ui["edluffy/specs.nvim"] = {
 	config = require("ui.specs"),
 }
 
+ui["folke/tokyonight.nvim"] = {
+	opt = false,
+	as = "toykonight",
+	config = require("ui.tokyo-night"),
+}
+ui["roobert/tailwindcss-colorizer-cmp.nvim"] = {
+	opt = true,
+	config = require("ui.tw-colorizer"),
+}
 return ui
