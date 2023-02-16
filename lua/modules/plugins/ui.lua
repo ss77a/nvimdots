@@ -70,14 +70,17 @@ ui["edluffy/specs.nvim"] = {
 }
 
 ui["folke/tokyonight.nvim"] = {
-	opt = false,
-	as = "toykonight",
+	lazy = true,
 	config = require("ui.tokyo-night"),
 }
 ui["roobert/tailwindcss-colorizer-cmp.nvim"] = {
-	opt = true,
-	as = "tailwindcss-colorizer-cmp",
-	module = "tailwindcss-colorizer-cmp",
+	lazy = false,
 	config = require("ui.tw-colorizer"),
+}
+ui["shortcuts/no-neck-pain.nvim"] = {
+	lazy = true,
+	version = "*",
+	cmd = "NoNeckPain",
+	config = require("ui.no-neck-pain"),
 }
 return ui

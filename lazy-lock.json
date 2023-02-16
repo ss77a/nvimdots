@@ -42,6 +42,7 @@
   "mason.nvim": { "branch": "main", "commit": "a35f3c44381c8ce37faefd427b474ea5ef72d37d" },
   "neodim": { "branch": "master", "commit": "c346344ade2ce709e6bd282f10e43778672b861e" },
   "neoscroll.nvim": { "branch": "master", "commit": "d7601c26c8a183fa8994ed339e70c2d841253e93" },
+  "no-neck-pain.nvim": { "branch": "main", "commit": "7a84c5415cb1830c4b2fecdac14a0f50423209c7" },
   "nord.nvim": { "branch": "master", "commit": "9824b8511dcb7d89de628d7e9bab5fa65c9d59d1" },
   "nvim-autopairs": { "branch": "master", "commit": "45ae3122a4c7744db41298b41f9f5a3f092123e6" },
   "nvim-bufdel": { "branch": "main", "commit": "a60b3531e5bd56f8602acb4ba7f5b2eeb782d54b" },
