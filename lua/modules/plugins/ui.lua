@@ -83,7 +83,7 @@ ui["roobert/tailwindcss-colorizer-cmp.nvim"] = {
 	config = require("ui.tw-colorizer"),
 }
 ui["shortcuts/no-neck-pain.nvim"] = {
-	lazy = true,
+	lazy = false,
 	version = "*",
 	cmd = "NoNeckPain",
 	config = require("ui.no-neck-pain"),
