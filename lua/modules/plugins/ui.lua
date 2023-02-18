@@ -88,4 +88,8 @@ ui["shortcuts/no-neck-pain.nvim"] = {
 	cmd = "NoNeckPain",
 	config = require("ui.no-neck-pain"),
 }
+ui["sindrets/diffview.nvim"] = {
+	lazy = true,
+	config = require("ui.diffview"),
+}
 return ui
