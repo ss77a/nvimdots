@@ -8,9 +8,7 @@ settings["use_ssh"] = true
 settings["format_on_save"] = true
 
 -- Set the format disabled directories here, files under these dirs won't be formatted on save.
-settings["format_disabled_dirs"] = {
-	home .. "/format_disabled_dir_under_home",
-}
+settings["format_disabled_dirs"] = {home .. "/format_disabled_dir_under_home"}
 
 -- NOTE: The startup time will be slowed down when it's true.
 -- Set it to false if you don't use nvim to open big files.
@@ -36,13 +34,9 @@ settings["background"] = "dark"
 -- check the below link for all the supported LSPs:
 -- https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/server_configurations
 settings["lsp"] = {
-	"bashls",
-	"clangd",
-	"gopls",
-	"html",
-	"jsonls",
-	"lua_ls",
-	"pyright",
+    "bashls", "clangd", "html", "jsonls", "lua_ls", "pyright"
+    -- Uncomment the below line to make sure `gopls` installed by `mason`.
+    -- "gopls",
 }
 
 -- Set the desired non-LSP sources here.
@@ -50,20 +44,11 @@ settings["lsp"] = {
 -- in `code_actions`, `completion`, `diagnostics`, `formatting`, `hover` folders:
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins
 settings["null_ls"] = {
-	-- formatting
-	"black",
-	"clang_format",
-	"eslint_d",
-	"jq",
-	"markdownlint",
-	"prettierd",
-	"rustfmt",
-	"shfmt",
-	"stylua",
-
-	-- diagnostics
-	"shellcheck",
-	-- "markdownlint",
+    -- formatting
+    "black", "clang_format", "eslint_d", "jq", "markdownlint", "prettierd",
+    "rustfmt", "shfmt", "stylua", -- diagnostics
+    "shellcheck", "phpcbf", "phpmd"
+    -- "markdownlint",
 }
 
 return settings

@@ -15,10 +15,7 @@ ui["catppuccin/nvim"] = {
 	name = "catppuccin",
 	config = require("ui.catppuccin"),
 }
-ui["sainnhe/edge"] = {
-	lazy = true,
-	config = require("ui.edge"),
-}
+ui["sainnhe/edge"] = { lazy = true, config = require("ui.edge") }
 ui["j-hui/fidget.nvim"] = {
 	lazy = true,
 	event = "BufReadPost",
@@ -49,10 +46,7 @@ ui["karb94/neoscroll.nvim"] = {
 	event = "BufReadPost",
 	config = require("ui.neoscroll"),
 }
-ui["shaunsingh/nord.nvim"] = {
-	lazy = true,
-	config = require("ui.nord"),
-}
+ui["shaunsingh/nord.nvim"] = { lazy = true, config = require("ui.nord") }
 ui["rcarriga/nvim-notify"] = {
 	lazy = true,
 	event = "VeryLazy",
@@ -74,10 +68,7 @@ ui["edluffy/specs.nvim"] = {
 	config = require("ui.specs"),
 }
 
-ui["folke/tokyonight.nvim"] = {
-	lazy = true,
-	config = require("ui.tokyo-night"),
-}
+ui["folke/tokyonight.nvim"] = { lazy = true, config = require("ui.tokyo-night") }
 ui["roobert/tailwindcss-colorizer-cmp.nvim"] = {
 	lazy = false,
 	config = require("ui.tw-colorizer"),
@@ -88,8 +79,40 @@ ui["shortcuts/no-neck-pain.nvim"] = {
 	cmd = "NoNeckPain",
 	config = require("ui.no-neck-pain"),
 }
-ui["sindrets/diffview.nvim"] = {
-	lazy = true,
-	config = require("ui.diffview"),
+ui["sindrets/diffview.nvim"] = { lazy = true, config = require("ui.diffview") }
+
+ui["themaxmarchuk/tailwindcss-colors.nvim"] = {
+	-- load only on require("tailwindcss-colors")
+	module = "tailwindcss-colors",
+	-- run the setup function after plugin is loaded
+	config = function()
+		-- pass config options here (or nothing to use defaults)
+		require("tailwindcss-colors").setup()
+	end,
+}
+
+ui["gbprod/phpactor.nvim"] = {
+	-- run = require("phpactor.handler.update"), -- To install/update phpactor when installing this plugin
+	dependencies = {
+		"nvim-lua/plenary.nvim", -- required to update phpactor
+		"neovim/nvim-lspconfig", -- required to automatically register lsp serveur
+	},
+	config = function()
+		require("phpactor").setup({
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+			install = {
+				path = "/home/sam/.cfg/phpactor/",
+				branch = "master",
+				bin = "/home/sam/.cfg/bin/phpactor",
+				php_bin = "php",
+				composer_bin = "composer",
+				git_bin = "git",
+				check_on_startup = "none",
+			},
+			lspconfig = { enabled = true, options = {} },
+		})
+	end,
 }
 return ui
