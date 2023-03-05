@@ -78,7 +78,7 @@ find the alpha config I want
 the package.json reading plugin is having issues think that nui is itself not working
 null-ls-embedded
 review other projects added to
-https://github.com/stars/ss77a/lists/nvim
+<https://github.com/stars/ss77a/lists/nvim>
 review my old configs (nvchad|monrepo|others)
 inviestigate other repos
 
@@ -86,6 +86,7 @@ plugins
 ghosttext
 
 # Details
+
 ```pwsh
 Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ayamir/nvimdots/HEAD/scripts/install.ps1'))
 ```
