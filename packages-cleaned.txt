@@ -1,7 +1,4 @@
      color-picker.nvim 
-     dressing.nvim 
-     icon-picker.nvim 
-     legendary.nvim 
      markid 
      neo-minimap 
      neo-tree.nvim 
@@ -14,8 +11,8 @@
      substitute.nvim 
      syntax-tree-surfer 
      themer.lua 
-     tokyonight.nvim 
      vim-astro 
-     vim-eft 
      web-tools.nvim 
-  
+    https://github.com/folke/todo-comments.nvim
+    no neck pain 
+    https://github.com/JoosepAlviste/palenightfall.nvim 

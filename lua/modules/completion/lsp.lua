@@ -10,11 +10,7 @@ local mason_lsp = require("mason-lspconfig")
 
 require("lspconfig.ui.windows").default_options.border = "single"
 
-mason.setup({
-	ui = {
-		border = "rounded",
-	},
-})
+mason.setup({ ui = { border = "rounded" } })
 mason_lsp.setup({
 	ensure_installed = {
 		"bashls",
@@ -243,9 +239,9 @@ efmls.init({
 -- Require `efmls-configs-nvim`'s config here
 
 local vint = require("efmls-configs.linters.vint")
---local eslint = require("efmls-configs.linters.eslint")
-local eslint_d = require 'efmls-configs.linters.eslint_d'
---local eslint_d_fmt = require 'efmls-configs.formatters.eslint_d'
+-- local eslint = require("efmls-configs.linters.eslint")
+local eslint_d = require("efmls-configs.linters.eslint_d")
+local eslint_d_fmt = require("efmls-configs.formatters.eslint_d")
 local flake8 = require("efmls-configs.linters.flake8")
 local shellcheck = require("efmls-configs.linters.shellcheck")
 
@@ -288,7 +284,8 @@ efmls.setup({
 	scss = { formatter = prettier },
 	sh = { formatter = shfmt, linter = shellcheck },
 	markdown = { formatter = prettier },
-	
+	php = { formatter = prettier, linter = eslint_d },
+
 	-- rust = {formatter = rustfmt},
 })
 
