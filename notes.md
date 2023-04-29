@@ -9,7 +9,7 @@ how to start locating such issues and tracking them down
 ## more unicorn uninification idealogeologized notions
 
 cargo and fzf and such are awesome next gen patches for systems find more
-find those that arent neovim intergrated persee but workflow synigized all the same
+find those that aren't neovim integrated persee but workflow synigized all the same
 
 ## map and command
 
@@ -35,15 +35,15 @@ make this thing work well and go fourth for me and use the vscode thingy
 
 markid is nice but is it conflicting with legendary
 
-## formating
+## formatting
 
 null-ls-embedded
 
 ## testing
 
 perhaps selene or something
-wow oh my wow - testing for anything and very nice interace
-https://alpha2phi.medium.com/neovim-for-beginners-test-debugging-and-automation-e39eb5322841
+wow oh my wow - testing for anything and very nice interface
+<https://alpha2phi.medium.com/neovim-for-beginners-test-debugging-and-automation-e39eb5322841>
 
 need to find way to make that package.json plugin plug into the system
 
@@ -52,8 +52,8 @@ need to find way to make that package.json plugin plug into the system
 fzf - aint even working entirely or perhaps even at all (tbh scope of telescope itself baffles me more than somewhat)
 i have attempted to setup an alternative approach that address the issues i might be facing but im wander in the darkness
 media files
-project - certain files exist in tandem or conjuction with optional additions makes directory a project
-find way to auto indentify these folders and index them so they are used in fzf and then also in neovim
+project - certain files exist in tandem or conjunction with optional additions makes directory a project
+find way to auto identify these folders and index them so they are used in fzf and then also in neovim
 package.json access in telescope would be awesome (nui provides another way to overlay interfaces - wish telescope was an option)
 
 ## themes
@@ -69,4 +69,4 @@ for testing so my config does not break test new tweaks in a docker instance
 
 want some quick keys to both exit and save and exit
 
-https://unix.stackexchange.com/questions/93144/exit-vim-more-quickly
+<https://unix.stackexchange.com/questions/93144/exit-vim-more-quickly>
