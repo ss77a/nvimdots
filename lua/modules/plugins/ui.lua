@@ -17,9 +17,9 @@ ui["catppuccin/nvim"] = {
 }
 ui["sainnhe/edge"] = {lazy = true, config = require("ui.edge")}
 ui["j-hui/fidget.nvim"] = {
-    lazy = true,
-    event = "BufReadPost",
-    config = require("ui.fidget")
+	lazy = true,
+	event = "LspAttach",
+	config = require("ui.fidget"),
 }
 ui["lewis6991/gitsigns.nvim"] = {
     lazy = true,

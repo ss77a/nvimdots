@@ -1,5 +1,5 @@
 return function()
-	require("modules.utils").gen_lspkind_hl()
+	-- require("modules.utils").gen_lspkind_hl()
 
 	local icons = {
 		cmp = require("modules.utils.icons").get("cmp", true),
@@ -26,14 +26,8 @@ return function()
 	set_sidebar_icons()
 
 	require("lspsaga").setup({
-		preview = {
-			lines_above = 1,
-			lines_below = 17,
-		},
-		scroll_preview = {
-			scroll_down = "<C-j>",
-			scroll_up = "<C-k>",
-		},
+		preview = { lines_above = 1, lines_below = 17 },
+		scroll_preview = { scroll_down = "<C-j>", scroll_up = "<C-k>" },
 		request_timeout = 3000,
 		finder = {
 			keys = {
@@ -41,7 +35,7 @@ return function()
 				expand_or_jump = "<CR>",
 				vsplit = "s",
 				split = "i",
-				tabe = "t",
+				table = "t",
 				quit = { "q", "<ESC>" },
 				close_in_preview = "<ESC>",
 			},
@@ -50,16 +44,10 @@ return function()
 			edit = "<C-c>o",
 			vsplit = "<C-c>v",
 			split = "<C-c>s",
-			tabe = "<C-c>t",
+			table = "<C-c>t",
 			quit = "q",
 		},
-		code_action = {
-			num_shortcut = true,
-			keys = {
-				quit = "q",
-				exec = "<CR>",
-			},
-		},
+		code_action = { num_shortcut = true, keys = { quit = "q", exec = "<CR>" } },
 		lightbulb = {
 			enable = false,
 			sign = true,
@@ -102,10 +90,7 @@ return function()
 			auto_refresh = true,
 			auto_close = true,
 			close_after_jump = true,
-			keys = {
-				expand_or_jump = "<CR>",
-				quit = "q",
-			},
+			keys = { expand_or_jump = "<CR>", quit = "q" },
 		},
 		symbol_in_winbar = {
 			enable = false,
@@ -114,11 +99,9 @@ return function()
 			show_file = false,
 			color_mode = true,
 		},
-		beacon = {
-			enable = true,
-			frequency = 12,
-		},
+		beacon = { enable = true, frequency = 12 },
 		ui = {
+			title = false,
 			border = "single", -- Can be single, double, rounded, solid, shadow.
 			winblend = 0,
 			actionfix = icons.ui.Spell,
@@ -148,7 +131,10 @@ return function()
 				Package = { icons.kind.Package, "LspKindPackage" },
 				Property = { icons.kind.Property, "LspKindProperty" },
 				Struct = { icons.kind.Struct, "LspKindStruct" },
-				TypeParameter = { icons.kind.TypeParameter, "LspKindTypeParameter" },
+				TypeParameter = {
+					icons.kind.TypeParameter,
+					"LspKindTypeParameter",
+				},
 				Variable = { icons.kind.Variable, "LspKindVariable" },
 				-- Type
 				Array = { icons.type.Array, "LspKindArray" },

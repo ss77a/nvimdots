@@ -67,14 +67,8 @@ return function()
 		lualine_y = {},
 		lualine_z = {},
 	}
-	local outline = {
-		sections = mini_sections,
-		filetypes = { "lspsagaoutline" },
-	}
-	local diffview = {
-		sections = mini_sections,
-		filetypes = { "DiffviewFiles" },
-	}
+	local outline = { sections = mini_sections, filetypes = { "lspsagaoutline" } }
+	local diffview = { sections = mini_sections, filetypes = { "DiffviewFiles" } }
 
 	local function python_venv()
 		local function env_cleanup(venv)
@@ -133,11 +127,7 @@ return function()
 				{
 					"fileformat",
 					icons_enabled = true,
-					symbols = {
-						unix = "LF",
-						dos = "CRLF",
-						mac = "CR",
-					},
+					symbols = { unix = "LF", dos = "CRLF", mac = "CR" },
 				},
 			},
 			lualine_z = { "progress", "location" },
@@ -164,7 +154,7 @@ return function()
 
 	-- Properly set background color for lspsaga
 	local winbar_bg = require("modules.utils").hl_to_rgb("StatusLine", true, colors.mantle)
-	for _, hlGroup in pairs(require("lspsaga.lspkind").get_kind_group()) do
-		require("modules.utils").extend_hl(hlGroup, { bg = winbar_bg })
-	end
+	-- for _, hlGroup in pairs(require("lspsaga.lspkind").get_kind_group()) do
+	--	require("modules.utils").extend_hl(hlGroup, { bg = winbar_bg })
+	-- end
 end
