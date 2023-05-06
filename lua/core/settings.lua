@@ -69,7 +69,7 @@ settings["lsp_deps"] = {
 	"html",
 	"jsonls",
 	"lua_ls",
-	"pyright",
+	"jedi_language_server",
 	-- "gopls",
 }
 
@@ -92,5 +92,9 @@ settings["null_ls_deps"] = {
 	"phpcbf",
 	"phpmd",
 }
+
+-- Set the inline_diagnostic_virtual_text to false if they are annoying for you
+---@type boolean
+settings["inline_diagnostic_virtual_text"] = true
 
 return settings
