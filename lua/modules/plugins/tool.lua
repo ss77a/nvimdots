@@ -4,17 +4,12 @@ tool["tpope/vim-fugitive"] = {
 	lazy = true,
 	cmd = { "Git", "G" },
 }
--- Please don't remove which-key.nvim otherwise you need to set timeoutlen=300 at `lua/core/options.lua`
-tool["folke/which-key.nvim"] = {
-	lazy = true,
-	event = "VeryLazy",
-	config = require("tool.which-key"),
-}
 -- only for fcitx5 user who uses non-English language during coding
--- tool["brglng/vim-im-select"] = {
+-- tool["pysan3/fcitx5.nvim"] = {
 -- 	lazy = true,
 -- 	event = "BufReadPost",
--- 	config = require("tool.imselect"),
+-- 	cond = vim.fn.executable("fcitx5-remote") == 1,
+-- 	config = require("tool.fcitx5"),
 -- }
 tool["nvim-tree/nvim-tree.lua"] = {
 	lazy = true,
@@ -57,6 +52,11 @@ tool["folke/trouble.nvim"] = {
 	cmd = { "Trouble", "TroubleToggle", "TroubleRefresh" },
 	config = require("tool.trouble"),
 }
+tool["folke/which-key.nvim"] = {
+	lazy = true,
+	event = { "CursorHold", "CursorHoldI" },
+	config = require("tool.which-key"),
+}
 tool["gelguy/wilder.nvim"] = {
 	lazy = true,
 	event = "CmdlineEnter",
@@ -74,7 +74,6 @@ tool["nvim-telescope/telescope.nvim"] = {
 	dependencies = {
 		{ "nvim-tree/nvim-web-devicons" },
 		{ "nvim-lua/plenary.nvim" },
-		{ "nvim-lua/popup.nvim" },
 		{ "debugloop/telescope-undo.nvim" },
 		{
 			"ahmedkhalf/project.nvim",

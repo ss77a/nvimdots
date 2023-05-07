@@ -13,9 +13,6 @@ return function()
 		hijack_cursor = true,
 		hijack_netrw = true,
 		hijack_unnamed_buffer_when_opening = true,
-		ignore_buffer_on_setup = false,
-		open_on_setup = false,
-		open_on_setup_file = false,
 		open_on_tab = false,
 		respect_buf_cwd = false,
 		sort_by = "name",
@@ -29,7 +26,6 @@ return function()
 			number = false,
 			relativenumber = false,
 			signcolumn = "yes",
-			hide_root_folder = false,
 			float = {
 				enable = false,
 				open_win_config = {
@@ -70,17 +66,17 @@ return function()
 					git = true,
 				},
 				padding = " ",
-				symlink_arrow = "  ",
+				symlink_arrow = " 󰁔 ",
 				glyphs = {
 					default = icons.documents.Default, --
 					symlink = icons.documents.Symlink, --
 					bookmark = icons.ui.Bookmark,
 					git = {
 						unstaged = icons.git.Mod_alt,
-						staged = icons.git.Add, --
+						staged = icons.git.Add, --󰄬
 						unmerged = icons.git.Unmerged,
-						renamed = icons.git.Rename, --
-						untracked = icons.git.Untracked, -- "ﲉ"
+						renamed = icons.git.Rename, --󰁔
+						untracked = icons.git.Untracked, -- "󰞋"
 						deleted = icons.git.Remove, --
 						ignored = icons.git.Ignore, --◌
 					},
@@ -108,7 +104,6 @@ return function()
 			update_root = true,
 			ignore_list = {},
 		},
-		ignore_ft_on_setup = {},
 		filters = {
 			dotfiles = false,
 			custom = { ".DS_Store" },

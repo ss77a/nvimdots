@@ -1,6 +1,4 @@
 return function()
-	local formatting = require("completion.formatting")
-
 	local nvim_lsp = require("lspconfig")
 	local mason = require("mason")
 	local mason_lspconfig = require("mason-lspconfig")
@@ -33,18 +31,19 @@ return function()
 		},
 	})
 	mason_lspconfig.setup({
-		ensure_installed = {
-			"bashls",
-			"clangd",
-			"efm",
-			"gopls",
-			"pyright",
-			"lua_ls",
-		},
+		ensure_installed = require("core.settings").lsp_deps,
 	})
 
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
+	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+		signs = true,
+		underline = true,
+		virtual_text = require("core.settings").diagnostics_virtual_text,
+		-- set update_in_insert to false bacause it was enabled by lspsaga
+		update_in_insert = false,
+	})
 
 	local opts = {
 		on_attach = function()
@@ -63,114 +62,40 @@ return function()
 		capabilities = capabilities,
 	}
 
-	mason_lspconfig.setup_handlers({
-		function(server)
-			require("lspconfig")[server].setup({
-				capabilities = opts.capabilities,
-				on_attach = opts.on_attach,
-			})
-		end,
-
-		bashls = function()
-			local _opts = require("completion.servers.bashls")
-			local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
-			nvim_lsp.bashls.setup(final_opts)
-		end,
-
-		clangd = function()
-			local _capabilities = vim.tbl_deep_extend("keep", { offsetEncoding = { "utf-16", "utf-8" } }, capabilities)
-			local _opts = require("completion.servers.clangd")
-			local final_opts =
-				vim.tbl_deep_extend("keep", _opts, { on_attach = opts.on_attach, capabilities = _capabilities })
-			nvim_lsp.clangd.setup(final_opts)
-		end,
-
-		efm = function()
-			-- Do not setup efm
-		end,
-
-		gopls = function()
-			local _opts = require("completion.servers.gopls")
-			local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
-			nvim_lsp.gopls.setup(final_opts)
-		end,
-
-		jsonls = function()
-			local _opts = require("completion.servers.jsonls")
-			local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
-			nvim_lsp.jsonls.setup(final_opts)
-		end,
-
-		lua_ls = function()
-			local _opts = require("completion.servers.lua_ls")
-			local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
-			nvim_lsp.lua_ls.setup(final_opts)
-		end,
-	})
-
-	if vim.fn.executable("html-languageserver") then
-		local _opts = require("completion.servers.html")
-		local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
-		nvim_lsp.html.setup(final_opts)
+	---A handler to setup all servers defined under `completion/servers/*.lua`
+	---@param lsp_name string
+	local function mason_handler(lsp_name)
+		local ok, custom_handler = pcall(require, "completion.servers." .. lsp_name)
+		if not ok then
+			-- Default to use factory config for server(s) that doesn't include a spec
+			nvim_lsp[lsp_name].setup(opts)
+			return
+		elseif type(custom_handler) == "function" then
+			--- Case where language server requires its own setup
+			--- Make sure to call require("lspconfig")[lsp_name].setup() in the function
+			--- See `clangd.lua` for example.
+			custom_handler(opts)
+		elseif type(custom_handler) == "table" then
+			nvim_lsp[lsp_name].setup(vim.tbl_deep_extend("force", opts, custom_handler))
+		else
+			vim.notify(
+				string.format(
+					"Failed to setup [%s].\n\nServer definition under `completion/servers` must return\neither a fun(opts) or a table (got '%s' instead)",
+					lsp_name,
+					type(custom_handler)
+				),
+				vim.log.levels.ERROR,
+				{ title = "nvim-lspconfig" }
+			)
+		end
 	end
 
-	local efmls = require("efmls-configs")
+	mason_lspconfig.setup_handlers({ mason_handler })
 
-	-- Init `efm-langserver` here.
-
-	efmls.init({
-		on_attach = opts.on_attach,
-		capabilities = capabilities,
-		init_options = { documentFormatting = true, codeAction = true },
-	})
-
-	-- Require `efmls-configs-nvim`'s config here
-
-	local vint = require("efmls-configs.linters.vint")
-	local eslint = require("efmls-configs.linters.eslint")
-	local flake8 = require("efmls-configs.linters.flake8")
-
-	local black = require("efmls-configs.formatters.black")
-	local stylua = require("efmls-configs.formatters.stylua")
-	local prettier = require("efmls-configs.formatters.prettier")
-	local shfmt = require("efmls-configs.formatters.shfmt")
-
-	-- Add your own config for formatter and linter here
-
-	-- local rustfmt = require("completion.efm.formatters.rustfmt")
-	local clangfmt = require("completion.efm.formatters.clangfmt")
-
-	-- Override default config here
-
-	flake8 = vim.tbl_extend("force", flake8, {
-		prefix = "flake8: max-line-length=160, ignore F403 and F405",
-		lintStdin = true,
-		lintIgnoreExitCode = true,
-		lintFormats = { "%f:%l:%c: %t%n%n%n %m" },
-		lintCommand = "flake8 --max-line-length 160 --extend-ignore F403,F405 --format '%(path)s:%(row)d:%(col)d: %(code)s %(code)s %(text)s' --stdin-display-name ${INPUT} -",
-	})
-
-	-- Setup formatter and linter for efmls here
-
-	efmls.setup({
-		vim = { formatter = vint },
-		lua = { formatter = stylua },
-		c = { formatter = clangfmt },
-		cpp = { formatter = clangfmt },
-		python = { formatter = black },
-		vue = { formatter = prettier },
-		typescript = { formatter = prettier, linter = eslint },
-		javascript = { formatter = prettier, linter = eslint },
-		typescriptreact = { formatter = prettier, linter = eslint },
-		javascriptreact = { formatter = prettier, linter = eslint },
-		yaml = { formatter = prettier },
-		html = { formatter = prettier },
-		css = { formatter = prettier },
-		scss = { formatter = prettier },
-		sh = { formatter = shfmt },
-		markdown = { formatter = prettier },
-		-- rust = {formatter = rustfmt},
-	})
-
-	formatting.configure_format_on_save()
+	-- Set lsps that are not supported by `mason.nvim` but supported by `nvim-lspconfig` here.
+	if vim.fn.executable("dart") then
+		local _opts = require("completion.servers.dartls")
+		local final_opts = vim.tbl_deep_extend("keep", _opts, opts)
+		nvim_lsp.dartls.setup(final_opts)
+	end
 end

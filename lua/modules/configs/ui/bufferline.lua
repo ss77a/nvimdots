@@ -1,5 +1,5 @@
 return function()
-	local icons = { ui = require("modules.utils.icons").get("ui") }
+    local icons = {ui = require("modules.utils.icons").get("ui")}
 
 	local opts = {
 		options = {
@@ -14,7 +14,6 @@ return function()
 			color_icons = true,
 			show_buffer_icons = true,
 			show_buffer_close_icons = true,
-			show_buffer_default_icon = true,
 			show_close_icon = true,
 			show_tab_indicators = true,
 			enforce_regular_tabs = true,
@@ -45,28 +44,29 @@ return function()
 		highlights = {},
 	}
 
-	if vim.g.colors_name == "catppuccin" then
+	if vim.g.colors_name:find("catppuccin") then
 		local cp = require("modules.utils").get_palette() -- Get the palette.
 
-		local catppuccin_hl_overwrite = {
-			highlights = require("catppuccin.groups.integrations.bufferline").get({
-				styles = { "italic", "bold" },
-				custom = {
-					mocha = {
-						-- Hint
-						hint = { fg = cp.rosewater },
-						hint_visible = { fg = cp.rosewater },
-						hint_selected = { fg = cp.rosewater },
-						hint_diagnostic = { fg = cp.rosewater },
-						hint_diagnostic_visible = { fg = cp.rosewater },
-						hint_diagnostic_selected = { fg = cp.rosewater },
-					},
-				},
-			}),
-		}
+        local catppuccin_hl_overwrite = {
+            highlights = require("catppuccin.groups.integrations.bufferline").get(
+                {
+                    styles = {"italic", "bold"},
+                    custom = {
+                        mocha = {
+                            -- Hint
+                            hint = {fg = cp.rosewater},
+                            hint_visible = {fg = cp.rosewater},
+                            hint_selected = {fg = cp.rosewater},
+                            hint_diagnostic = {fg = cp.rosewater},
+                            hint_diagnostic_visible = {fg = cp.rosewater},
+                            hint_diagnostic_selected = {fg = cp.rosewater}
+                        }
+                    }
+                })
+        }
 
-		opts = vim.tbl_deep_extend("force", opts, catppuccin_hl_overwrite)
-	end
+        opts = vim.tbl_deep_extend("force", opts, catppuccin_hl_overwrite)
+    end
 
-	require("bufferline").setup(opts)
+    require("bufferline").setup(opts)
 end
